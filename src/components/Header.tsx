@@ -4,13 +4,16 @@ import { List, ShoppingCart } from "lucide-react-native";
 export default function Header() {
   return (
     <View style={styles.header}>
-      <Text style={styles.nome}>intelifones</Text>
+      <Text style={styles.nome}>
+        intelifones
+      </Text>
       <TextInput
         style={styles.filtro}
         placeholder="Digite aqui"
+        placeholderTextColor="#64748B"
       />
-      <List color="#ffff" size={24}/>
-      <ShoppingCart color="#ffff" size={24} />
+      <List color="#fff" size={24} />
+      <ShoppingCart color="#fff" size={24} />
     </View>
   );
 }
@@ -18,21 +21,25 @@ export default function Header() {
 const styles = StyleSheet.create({
   header: {
     alignItems: "center",
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 14,
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: "#2563EB",
-    gap: 5,
+    gap: 10,
   },
   nome: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#ffff",
+    color: "#fff",
   },
   filtro: {
-    backgroundColor: "#ffff",
-    padding: 5,
-    borderWidth: 0,
-    borderRadius: 10,
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    fontSize: 14,
+    color: "#0F172A",
   },
 });
