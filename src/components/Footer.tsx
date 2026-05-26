@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#fff",
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     paddingVertical: 14,
     borderTopColor: "#E2E8F0",
   },
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   nome: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#64748B",
     fontWeight: "500",
   },

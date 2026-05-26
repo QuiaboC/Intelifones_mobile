@@ -4,9 +4,7 @@ import { List, ShoppingCart } from "lucide-react-native";
 export default function Header() {
   return (
     <View style={styles.header}>
-      <Text style={styles.nome}>
-        intelifones
-      </Text>
+      <Text style={styles.nome}>intelifones</Text>
       <TextInput
         style={styles.filtro}
         placeholder="Digite aqui"

@@ -12,17 +12,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import ButtonsHome from "../components/ButtonsHome";
 import CardProduto from "../components/CardProduto";
 import Footer from "../components/Footer";
+import { StatusBar } from "expo-status-bar";
 
 export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.body}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 30,
-        }}
-      >
+      <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
         <Header />
         <LinearGradient
           colors={["#2563EB", "#06B6D4"]}
@@ -53,7 +48,7 @@ export default function Home() {
         <ButtonsHome />
         <CardProduto />
       </ScrollView>
-      <Footer/>
+      <Footer />
     </SafeAreaView>
   );
 }
