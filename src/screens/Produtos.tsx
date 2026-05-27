@@ -1,5 +1,4 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import {
   StyleSheet,
   View,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 import Header from "../components/Header";
 import { ChevronDown } from "lucide-react-native";
+import Footer from "../components/Footer";
 
 export default function Produtos() {
   return (
@@ -72,6 +72,7 @@ export default function Produtos() {
           ))}
         </View>
       </ScrollView>
+      <Footer/>
     </SafeAreaView>
   );
 }
