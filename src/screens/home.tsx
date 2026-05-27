@@ -14,7 +14,7 @@ import CardProduto from "../components/CardProduto";
 import Footer from "../components/Footer";
 import { StatusBar } from "expo-status-bar";
 
-export default function Home() {
+export default function Home({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
@@ -41,7 +41,7 @@ export default function Home() {
               Cadastre-se para aproveitar ofertas exclusivas
             </Text>
           </View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
             <Text style={styles.buttonText}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
