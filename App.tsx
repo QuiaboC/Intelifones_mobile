@@ -7,6 +7,7 @@ import Registro from "./src/screens/registro";
 import Preview from "./src/screens/preview";
 import Produtos from "./src/screens/Produtos";
 import Carrinho from "./src/screens/Carrinho";
+import Perfil from "./src/screens/Perfil";
 import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,7 @@ export default function App() {
           <Stack.Screen name="Preview" component={Preview} />
           <Stack.Screen name="Produtos" component={Produtos} />
           <Stack.Screen name="Carrinho" component={Carrinho}/>
+          <Stack.Screen name="Perfil" component={Perfil}/>
         </Stack.Navigator>
       </NavigationContainer>
     </>

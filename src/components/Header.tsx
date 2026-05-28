@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-import { List, ShoppingCart } from "lucide-react-native";
+import { Bell, ShoppingCart } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Header() {
@@ -20,7 +20,7 @@ export default function Header() {
       />
 
       <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
-        <List color="#fff" size={24} />
+        <Bell color="#fff" size={24} />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
