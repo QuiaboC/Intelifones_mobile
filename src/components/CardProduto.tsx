@@ -1,12 +1,16 @@
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 export default function CardProduto() {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Produtos em ofertas</Text>
       <View style={styles.produtos}>
         {[1, 2, 3, 4].map((item) => (
-          <TouchableOpacity key={item} style={styles.card} activeOpacity={0.8}>
+          <TouchableOpacity key={item} style={styles.card} activeOpacity={0.8} onPress={() => navigation.navigate("Detalhes")}>
             <Image
               source={require("../../assets/vetorCadastro.png")}
               style={styles.imagem}

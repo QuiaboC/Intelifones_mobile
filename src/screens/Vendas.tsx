@@ -1,42 +1,45 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import {
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Image,
   TouchableOpacity,
+  TextInput,
+  ScrollView,
 } from "react-native";
-import { ChevronLeft, ShoppingCart, Trash } from "lucide-react-native";
-import Footer from "../components/Footer";
+import { ChevronLeft, Edit, Plus, Trash } from "lucide-react-native";
 
-export default function Carrinho({navigation}) {
+export default function Vendas({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ChevronLeft size={30} color="#ffff"/>
+        <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
+          <ChevronLeft size={30} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitulo}>Carrinho</Text>
+
+        <Text style={styles.headerTitulo}>Vendas</Text>
+      </View>
+
+      <View style={styles.containerFiltro}>
+        <TextInput
+          style={styles.filtro}
+          placeholder="Pesquisar produto"
+          placeholderTextColor="#64748B"
+        />
+
+        <TouchableOpacity style={styles.button}>
+          <Plus size={20} color="#fff" />
+          <Text style={styles.buttonText}>Cadastrar</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <View style={styles.containerCarrinho}>
-          <View style={styles.iconContainer}>
-            <ShoppingCart size={34} color="#2563EB" />
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.titulo}>Seu carrinho está fazio</Text>
-            <Text style={styles.subtitulo}>Adicione produtos para começar</Text>
-          </View>
-        </View>
-
         {[1, 2].map((item) => (
-          <View key={item} style={styles.produtoCarrinho}>
+          <View key={item} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
               <Image
                 source={require("../../assets/vetorHome.png")}
@@ -48,18 +51,26 @@ export default function Carrinho({navigation}) {
               <Text style={styles.tituloProduto} numberOfLines={2}>
                 Nome do produto
               </Text>
-              <Text style={styles.descricao}>Descrição do produto</Text>
+
+              <Text style={styles.descricao}>
+                Descrição do produto
+              </Text>
 
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>Novo</Text>
               </View>
+
+              <Text style={styles.preco}>R$ 50,00</Text>
             </View>
+
             <View style={styles.containerButton}>
+              <TouchableOpacity style={styles.editButton}>
+                <Edit size={20} color="#fff" />
+              </TouchableOpacity>
+
               <TouchableOpacity style={styles.deleteButton}>
                 <Trash size={20} color="#EF4444" />
               </TouchableOpacity>
-
-              <Text style={styles.preco}>R$ 50,00</Text>
             </View>
           </View>
         ))}
@@ -74,54 +85,64 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F5F9",
   },
 
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 18,
+    backgroundColor: "#2563EB",
+  },
+
+  headerTitulo: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
+  containerFiltro: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    padding: 15,
+  },
+
+  filtro: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+    fontSize: 14,
+  },
+
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "#10B981",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+
   scroll: {
     padding: 10,
     paddingBottom: 30,
-    gap: 10,
   },
 
-  containerCarrinho: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 20,
-    marginBottom: 5,
-  },
-
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 999,
-    backgroundColor: "#DBEAFE",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  textContainer: {
-    flex: 1,
-    gap: 4,
-  },
-
-  titulo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#2563EB",
-  },
-
-  subtitulo: {
-    fontSize: 14,
-    color: "#64748B",
-  },
-
-  produtoCarrinho: {
+  produtoCard: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 14,
     borderRadius: 18,
-    marginBottom: 5,
+    marginBottom: 12,
     gap: 12,
   },
 
@@ -139,7 +160,7 @@ const styles = StyleSheet.create({
 
   containerText: {
     flex: 1,
-    gap: 6,
+    gap: 5,
   },
 
   tituloProduto: {
@@ -167,10 +188,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
+  preco: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#2563EB",
+    marginTop: 4,
+  },
+
   containerButton: {
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 14,
+    gap: 10,
+  },
+
+  editButton: {
+    backgroundColor: "#2563EB",
+    padding: 8,
+    borderRadius: 10,
   },
 
   deleteButton: {
@@ -178,23 +210,4 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
   },
-
-  preco: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#2563EB",
-  },
-  header: {
-    alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 20,
-    flexDirection: "row",
-    backgroundColor: "#2563EB",
-    gap: 10,
-  },
-  headerTitulo: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#ffff",
-  }
-});
+}); 

@@ -22,27 +22,31 @@ import {
   Info,
 } from "lucide-react-native";
 
-export default function Perfil() {
+export default function Perfil({navigation}) {
   const atividades = [
     {
       id: 1,
-      nome: "Meus pedidos",
+      nome: "Minhas compras",
       icone: <Package size={22} color="#2563EB" />,
+      rota: "Compras"
     },
     {
       id: 2,
       nome: "Vendas",
       icone: <Handbag size={22} color="#2563EB" />,
+      rota: "Vendas"
     },
     {
       id: 3,
       nome: "Favoritos",
       icone: <Heart size={22} color="#2563EB" />,
+      rota: "Favoritos"
     },
     {
       id: 4,
       nome: "Carrinho",
       icone: <ShoppingCart size={22} color="#2563EB" />,
+      rota: "Carrinho"
     },
   ];
 
@@ -51,11 +55,13 @@ export default function Perfil() {
       id: 1,
       nome: "Informações",
       icone: <Info size={22} color="#2563EB" />,
+      rota: "Informações"
     },
     {
       id: 2,
       nome: "Configurações",
       icone: <Settings size={22} color="#2563EB" />,
+      rota: "Configurações"
     },
   ];
 
@@ -100,7 +106,7 @@ export default function Perfil() {
         <Text style={styles.categoriaTexto}>Minhas atividades</Text>
 
         {atividades.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.cardOpcao}>
+          <TouchableOpacity key={item.id} style={styles.cardOpcao} onPress={() => navigation.navigate(item.rota)}>
             <View style={styles.cardLeft}>
               <View style={styles.iconContainer}>{item.icone}</View>
 
@@ -114,7 +120,7 @@ export default function Perfil() {
         <Text style={styles.categoriaTexto}>Configurações e informações</Text>
 
         {configuracoes.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.cardOpcao}>
+          <TouchableOpacity key={item.id} style={styles.cardOpcao} onPress={() => navigation.navigate(item.rota)}>
             <View style={styles.cardLeft}>
               <View style={styles.iconContainer}>{item.icone}</View>
 

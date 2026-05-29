@@ -41,7 +41,7 @@ export default function Home({navigation}) {
               Cadastre-se para aproveitar ofertas exclusivas
             </Text>
           </View>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Registro")}>
             <Text style={styles.buttonText}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
