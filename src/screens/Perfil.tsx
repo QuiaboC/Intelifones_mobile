@@ -78,7 +78,7 @@ export default function Perfil({navigation}) {
         <View style={styles.infoPerfil}>
           <Text style={styles.NomePerfil}>Cleiton Paixão</Text>
 
-          <TouchableOpacity style={styles.buttonPerfil}>
+          <TouchableOpacity style={styles.buttonPerfil} onPress={() => navigation.navigate("PerfilUsuario")}>
             <Text style={styles.textPerfil}>Meu perfil</Text>
 
             <ChevronRight size={18} color="#fff" />
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
 
   divulgar: {
     padding: 10,
+    paddingBottom: 10,
     backgroundColor: "#2563EB",
   },
 

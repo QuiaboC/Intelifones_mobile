@@ -1,5 +1,4 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import {
   StyleSheet,
   ScrollView,
@@ -9,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { ChevronLeft, ShoppingCart, Trash } from "lucide-react-native";
-import Footer from "../components/Footer";
+
 
 export default function Carrinho({navigation}) {
   return (

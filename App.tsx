@@ -11,6 +11,9 @@ import Perfil from "./src/screens/Perfil";
 import Vendas from "./src/screens/Vendas";
 import Compras from "./src/screens/Compras";
 import Detalhes from "./src/screens/Detalhes";
+import Cadastro from "./src/screens/Cadastro";
+import Editar from "./src/screens/Editar";
+import PerfilUsuario from "./src/screens/PerfilUsuario";
 import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +37,9 @@ export default function App() {
           <Stack.Screen name="Vendas" component={Vendas}/>
           <Stack.Screen name="Compras" component={Compras}/>
           <Stack.Screen name="Detalhes" component={Detalhes}/>
+          <Stack.Screen name="Cadastro" component={Cadastro}/>
+          <Stack.Screen name="Editar" component={Editar}/>
+          <Stack.Screen name="PerfilUsuario" component={PerfilUsuario}/>
         </Stack.Navigator>
       </NavigationContainer>
     </>

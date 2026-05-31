@@ -28,7 +28,7 @@ export default function Vendas({ navigation }) {
           placeholderTextColor="#64748B"
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Cadastro")}>
           <Plus size={20} color="#fff" />
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
@@ -64,7 +64,7 @@ export default function Vendas({ navigation }) {
             </View>
 
             <View style={styles.containerButton}>
-              <TouchableOpacity style={styles.editButton}>
+              <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("Editar")}>
                 <Edit size={20} color="#fff" />
               </TouchableOpacity>
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 
   scroll: {
     padding: 10,
-    paddingBottom: 30,
+    paddingBottom: 10,
   },
 
   produtoCard: {
