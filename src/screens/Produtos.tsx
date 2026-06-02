@@ -10,29 +10,33 @@ import {
 import Header from "../components/Header";
 import { ChevronDown } from "lucide-react-native";
 import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Produtos() {
+  const [produto, setProduto] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://10.0.0.110:8080/produtos")
+      .then((response) => setProduto(response.data));
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
 
       <View style={styles.containerCategoria}>
         <View style={styles.categoria}>
-          <Text style={styles.textCategoria}>
-            Categoria
-          </Text>
+          <Text style={styles.textCategoria}>Categoria</Text>
           <ChevronDown size={18} color="#475569" />
         </View>
         <View style={styles.categoria}>
-          <Text style={styles.textCategoria}>
-            Preço
-          </Text>
+          <Text style={styles.textCategoria}>Preço</Text>
           <ChevronDown size={18} color="#475569" />
         </View>
         <View style={styles.categoriaSemBorda}>
-          <Text style={styles.textCategoria}>
-            Condição
-          </Text>
+          <Text style={styles.textCategoria}>Condição</Text>
           <ChevronDown size={18} color="#475569" />
         </View>
       </View>
@@ -42,37 +46,27 @@ export default function Produtos() {
         contentContainerStyle={styles.scroll}
       >
         <View style={styles.produtos}>
-          {[1, 2, 3, 4, 5, 6].map((item) => (
+          {produto.map((item) => (
             <TouchableOpacity
-              key={item}
+              key={item.id}
               style={styles.card}
               activeOpacity={0.8}
             >
-              <Image
-                source={require("../../assets/vetorCadastro.png")}
-                style={styles.imagem}
-              />
+              <Image source={{ uri: item.image }} style={styles.imagem} />
               <View style={styles.info}>
-                <Text
-                  style={styles.nome}
-                  numberOfLines={2}
-                >
-                  Nome do produto tal tal
+                <Text style={styles.nome} numberOfLines={2}>
+                  {item.nome}
                 </Text>
-                <Text style={styles.preco}>
-                  R$ 50,00
-                </Text>
+                <Text style={styles.preco}>R$ {item.preco}</Text>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>
-                    Novo
-                  </Text>
+                  <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
                 </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
-      <Footer/>
+      <Footer />
     </SafeAreaView>
   );
 }
@@ -115,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 14,
     paddingBottom: 30,
   },
-    produtos: {
+  produtos: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",

@@ -1,4 +1,7 @@
+import { useRoute } from "@react-navigation/native";
+import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -9,8 +12,61 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Editar({navigation}){
-return (
+export default function Editar({ navigation }) {
+  const route = useRoute();
+  const { id } = route.params;
+  const [form, setForm] = useState({
+    nome: "",
+    categoria: "",
+    preco: "",
+    descricao: "",
+    image: "",
+    usado: "",
+    estadoConservacao: "",
+    quantidade: "",
+    ativo: "",
+  });
+
+  useEffect(() => {
+    axios
+      .get(`http://10.0.0.110:8080/produtos/${id}`)
+      .then((response) => setForm(response.data))
+      .catch((error) => console.log(error));
+  }, [id]);
+  const handleChange = (campo, valor) => {
+    setForm((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
+  };
+  const EditarPerfil = async (id) => {
+    try {
+      const response = await axios.put(
+        `http://10.0.0.110:8080/produtos/${id}`,
+        {
+          nome: form.nome,
+          descricao: form.descricao,
+          preco: Number(form.preco),
+          categoria: form.categoria,
+          image: form.image,
+          usado:
+            typeof form.usado === "boolean"
+              ? form.usado
+              : form.usado.toLowerCase() === "sim",
+          estadoConservacao: form.estadoConservacao,
+          quantidade: Number(form.quantidade),
+          ativo: true,
+        },
+      );
+
+      console.log("Editado com sucesso:", response.data);
+
+      navigation.goBack();
+    } catch (error) {
+      console.log("Erro ao cadastrar:", error);
+    }
+  };
+  return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -40,16 +96,8 @@ return (
               placeholder="Digite o nome do produto"
               placeholderTextColor="#64748B"
               style={styles.input}
-            />
-          </View>
-
-          <View style={styles.containerInput}>
-            <Text style={styles.label}>Marca</Text>
-
-            <TextInput
-              placeholder="Digite a marca"
-              placeholderTextColor="#64748B"
-              style={styles.input}
+              value={form.nome}
+              onChangeText={(text) => handleChange("nome", text)}
             />
           </View>
 
@@ -60,6 +108,8 @@ return (
               placeholder="Smartphone, Notebook, Tablet ou Acessório"
               placeholderTextColor="#64748B"
               style={styles.input}
+              value={form.categoria}
+              onChangeText={(text) => handleChange("categoria", text)}
             />
           </View>
 
@@ -71,6 +121,8 @@ return (
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
+              value={String(form.preco)}
+              onChangeText={(text) => handleChange("preco", text)}
             />
           </View>
 
@@ -81,6 +133,8 @@ return (
               placeholder="URL da imagem"
               placeholderTextColor="#64748B"
               style={styles.input}
+              value={form.image}
+              onChangeText={(text) => handleChange("image", text)}
             />
           </View>
 
@@ -91,6 +145,8 @@ return (
               placeholder="Novo, Seminovo ou Usado"
               placeholderTextColor="#64748B"
               style={styles.input}
+              value={form.estadoConservacao}
+              onChangeText={(text) => handleChange("estadoConservacao", text)}
             />
           </View>
 
@@ -101,6 +157,8 @@ return (
               placeholder="Sim ou Não"
               placeholderTextColor="#64748B"
               style={styles.input}
+              value={String(form.usado)}
+              onChangeText={(text) => handleChange("usado", text)}
             />
           </View>
 
@@ -112,6 +170,8 @@ return (
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
+              value={String(form.quantidade)}
+              onChangeText={(text) => handleChange("quantidade", text)}
             />
           </View>
 
@@ -125,11 +185,16 @@ return (
               numberOfLines={4}
               textAlignVertical="top"
               style={[styles.input, styles.textArea]}
+              value={form.descricao}
+              onChangeText={(text) => handleChange("descricao", text)}
             />
           </View>
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Cadastrar Produto</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => EditarPerfil(id)}
+          >
+            <Text style={styles.buttonText}>Salvar Alterações</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -167,7 +232,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 18,
   },
-  
+
   containerTitulo: {
     marginBottom: 20,
     gap: 5,

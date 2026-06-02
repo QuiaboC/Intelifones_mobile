@@ -9,8 +9,24 @@ import {
 } from "react-native";
 import { Bell, ChevronLeft, ShoppingCart } from "lucide-react-native";
 import Footer from "../components/Footer";
+import { useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Detalhes({ navigation }) {
+  const route = useRoute();
+  const { id } = route.params;
+  const [produto, setProduto] = useState([]);
+
+  useEffect(() => {
+  axios
+    .get(`http://10.0.0.110:8080/produtos/${id}`)
+    .then((response) => setProduto(response.data))
+    .catch((error) => console.log(error));
+}, [id]);
+
+  console.log(produto);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -34,22 +50,20 @@ export default function Detalhes({ navigation }) {
       >
         <View style={styles.containerImagem}>
           <Image
-            source={require("../../assets/vetorHome.png")}
+            source={{ uri: produto.image }}
             style={styles.imagem}
           />
         </View>
 
         <View style={styles.containerInfo}>
-          <Text style={styles.titulo}>Nome do produto</Text>
+          <Text style={styles.titulo}>{produto.nome}</Text>
           <Text style={styles.descricao}>
-            Produto em excelente estado. Aqui você pode adicionar uma descrição
-            mais completa com informações, especificações e detalhes para o
-            comprador.
+            {produto.descricao}
           </Text>
           <View style={styles.containerPreco}>
-            <Text style={styles.preco}>R$ 50,00</Text>
+            <Text style={styles.preco}>R$ {produto.preco}</Text>
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>Novo</Text>
+              <Text style={styles.badgeText}>{produto.estadoConservacao}</Text>
             </View>
           </View>
         </View>
@@ -92,8 +106,8 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   headerButtons: {
-    flexDirection: "row", 
-    gap:10,
+    flexDirection: "row",
+    gap: 10,
   },
   scroll: {
     paddingBottom: 30,

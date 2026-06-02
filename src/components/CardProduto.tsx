@@ -1,27 +1,37 @@
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 export default function CardProduto() {
 
   const navigation = useNavigation();
+  const [produto, setProduto] = useState([]);
+
+  useEffect(() => {
+    axios
+    .get("http://10.0.0.110:8080/produtos")
+    .then((response) => setProduto(response.data))
+  },[])
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Produtos em ofertas</Text>
       <View style={styles.produtos}>
-        {[1, 2, 3, 4].map((item) => (
-          <TouchableOpacity key={item} style={styles.card} activeOpacity={0.8} onPress={() => navigation.navigate("Detalhes")}>
+        {produto.map((item) => (
+          <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.8} onPress={() => navigation.navigate("Detalhes", { id: item.id})}>
             <Image
-              source={require("../../assets/vetorCadastro.png")}
+              source={{ uri: item.image }}
               style={styles.imagem}
             />
             <View style={styles.info}>
-              <Text style={styles.nome} numberOfLines={2}>
-                Nome do produto tal tal
+              <Text style={styles.nome} numberOfLines={1}>
+                {item.nome}
               </Text>
-              <Text style={styles.preco}>R$ 50,00</Text>
+              <Text style={styles.preco}>R$ {item.preco}</Text>
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>Novo</Text>
+                <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
               </View>
             </View>
           </TouchableOpacity>

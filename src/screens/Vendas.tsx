@@ -9,8 +9,31 @@ import {
   ScrollView,
 } from "react-native";
 import { ChevronLeft, Edit, Plus, Trash } from "lucide-react-native";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Vendas({ navigation }) {
+  const [produto, setProduto] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      axios
+        .get("http://10.0.0.110:8080/produtos")
+        .then((response) => setProduto(response.data))
+        .catch((error) => console.log(error));
+    }, []),
+  );
+
+  const deletarProduto = async (id) => {
+    try {
+      await axios.delete(`http://10.0.0.110:8080/produtos/${id}`);
+      setProduto((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -28,7 +51,10 @@ export default function Vendas({ navigation }) {
           placeholderTextColor="#64748B"
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Cadastro")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Cadastro")}
+        >
           <Plus size={20} color="#fff" />
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
@@ -38,37 +64,40 @@ export default function Vendas({ navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        {[1, 2].map((item) => (
-          <View key={item} style={styles.produtoCard}>
+        {produto.map((item) => (
+          <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
-              <Image
-                source={require("../../assets/vetorHome.png")}
-                style={styles.imagem}
-              />
+              <Image source={{ uri: item.image }} style={styles.imagem} />
             </View>
 
             <View style={styles.containerText}>
-              <Text style={styles.tituloProduto} numberOfLines={2}>
-                Nome do produto
+              <Text style={styles.tituloProduto} numberOfLines={1}>
+                {item.nome}
               </Text>
 
-              <Text style={styles.descricao}>
-                Descrição do produto
+              <Text style={styles.descricao} numberOfLines={1}>
+                {item.descricao}
               </Text>
 
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>Novo</Text>
+                <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
               </View>
 
-              <Text style={styles.preco}>R$ 50,00</Text>
+              <Text style={styles.preco}>R$ {item.preco}</Text>
             </View>
 
             <View style={styles.containerButton}>
-              <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate("Editar")}>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => navigation.navigate("Editar", {id: item.id})}
+              >
                 <Edit size={20} color="#fff" />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.deleteButton}>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                 onPress={() => deletarProduto(item.id)}
+              >
                 <Trash size={20} color="#EF4444" />
               </TouchableOpacity>
             </View>
@@ -210,4 +239,4 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
   },
-}); 
+});
