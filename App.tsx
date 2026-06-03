@@ -14,6 +14,8 @@ import Detalhes from "./src/screens/Detalhes";
 import Cadastro from "./src/screens/Cadastro";
 import Editar from "./src/screens/Editar";
 import PerfilUsuario from "./src/screens/PerfilUsuario";
+import EditarUsuario from "./src/screens/EditarUsuario";
+import FiltroBuscar from "./src/screens/FiltroBuscar";
 import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
@@ -40,6 +42,8 @@ export default function App() {
           <Stack.Screen name="Cadastro" component={Cadastro}/>
           <Stack.Screen name="Editar" component={Editar}/>
           <Stack.Screen name="PerfilUsuario" component={PerfilUsuario}/>
+          <Stack.Screen name="EditarUsuario" component={EditarUsuario}/>
+          <Stack.Screen name="FiltroBuscar" component={FiltroBuscar}/>
         </Stack.Navigator>
       </NavigationContainer>
     </>
