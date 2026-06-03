@@ -9,8 +9,48 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeft } from "lucide-react-native";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Registro({ navigation }) {
+  const [form, setForm] = useState({
+    nome: "",
+    email: "",
+    telefone: "",
+    endereco: "",
+    senha: "",
+    confirmarSenha: "",
+    ativo: "",
+  });
+
+  const handleChange = (campo, valor) => {
+    setForm((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
+  };
+
+  const cadastrarUsuario = async () => {
+    if (form.senha !== form.confirmarSenha) {
+      alert("As senhas não coincidem");
+      return;
+    }
+    try {
+      const response = await axios.post("http://10.0.0.110:8080/vendedores", {
+        nome: form.nome,
+        email: form.email,
+        telefone: form.telefone,
+        endereco: form.email,
+        senha: form.senha,
+        ativo: true,
+      });
+      console.log("cadastrado com sucesso", response.data);
+      navigation.navigate("Login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <LinearGradient
       colors={["#2563EB", "#06B6D4", "#F1F5F9"]}
@@ -42,6 +82,8 @@ export default function Registro({ navigation }) {
               placeholder="Digite seu nome"
               placeholderTextColor="#64748B"
               style={style.input}
+              value={form.nome}
+              onChangeText={(text) => handleChange("nome", text)}
             />
           </View>
           <View style={style.containerInput}>
@@ -51,6 +93,8 @@ export default function Registro({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="email-address"
               style={style.input}
+              value={form.email}
+              onChangeText={(text) => handleChange("email", text)}
             />
           </View>
           <View style={style.containerInput}>
@@ -60,6 +104,8 @@ export default function Registro({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="phone-pad"
               style={style.input}
+              value={form.telefone}
+              onChangeText={(text) => handleChange("telefone", text)}
             />
           </View>
           <View style={style.containerInput}>
@@ -68,6 +114,8 @@ export default function Registro({ navigation }) {
               placeholder="Digite seu endereço"
               placeholderTextColor="#64748B"
               style={style.input}
+              value={form.endereco}
+              onChangeText={(text) => handleChange("endereco", text)}
             />
           </View>
           <View style={style.containerInput}>
@@ -77,6 +125,8 @@ export default function Registro({ navigation }) {
               placeholderTextColor="#64748B"
               secureTextEntry
               style={style.input}
+              value={form.senha}
+              onChangeText={(text) => handleChange("senha", text)}
             />
           </View>
           <View style={style.containerInput}>
@@ -86,13 +136,12 @@ export default function Registro({ navigation }) {
               placeholderTextColor="#64748B"
               secureTextEntry
               style={style.input}
+              value={form.confirmarSenha}
+              onChangeText={(text) => handleChange("confirmarSenha", text)}
             />
           </View>
           <View style={style.containerButton}>
-            <TouchableOpacity
-              style={style.button}
-              onPress={() => navigation.navigate("Login")}
-            >
+            <TouchableOpacity style={style.button} onPress={cadastrarUsuario}>
               <Text style={style.textButton}>Cadastrar</Text>
             </TouchableOpacity>
           </View>

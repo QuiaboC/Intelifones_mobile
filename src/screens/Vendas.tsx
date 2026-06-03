@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function Vendas({ navigation }) {
   const [produto, setProduto] = useState([]);
+  const [busca, setBusca] = useState("");
 
   useFocusEffect(
     useCallback(() => {
@@ -34,6 +35,10 @@ export default function Vendas({ navigation }) {
     }
   };
 
+  const filtrosFiltrados = produto.filter((item) =>
+    item.nome.toLowerCase().includes(busca.toLowerCase()),
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -49,6 +54,8 @@ export default function Vendas({ navigation }) {
           style={styles.filtro}
           placeholder="Pesquisar produto"
           placeholderTextColor="#64748B"
+          value={busca}
+          onChangeText={setBusca}
         />
 
         <TouchableOpacity
@@ -64,7 +71,7 @@ export default function Vendas({ navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        {produto.map((item) => (
+        {filtrosFiltrados.map((item) => (
           <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
               <Image source={{ uri: item.image }} style={styles.imagem} />
@@ -89,14 +96,14 @@ export default function Vendas({ navigation }) {
             <View style={styles.containerButton}>
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={() => navigation.navigate("Editar", {id: item.id})}
+                onPress={() => navigation.navigate("Editar", { id: item.id })}
               >
                 <Edit size={20} color="#fff" />
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.deleteButton}
-                 onPress={() => deletarProduto(item.id)}
+                onPress={() => deletarProduto(item.id)}
               >
                 <Trash size={20} color="#EF4444" />
               </TouchableOpacity>

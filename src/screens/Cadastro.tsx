@@ -12,7 +12,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Cadastro({ navigation }) {
-  
   const [form, setForm] = useState({
     nome: "",
     categoria: "",
@@ -23,19 +22,17 @@ export default function Cadastro({ navigation }) {
     estadoConservacao: "",
     quantidade: "",
     ativo: "",
-  });  
+  });
 
   const handleChange = (campo, valor) => {
-  setForm((prev) => ({
-    ...prev,
-    [campo]: valor,
-  }));
-};
-const cadastrarProduto = async () => {
-  try {
-    const response = await axios.post(
-      "http://10.0.0.110:8080/produtos",
-      {
+    setForm((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
+  };
+  const cadastrarProduto = async () => {
+    try {
+      const response = await axios.post("http://10.0.0.110:8080/produtos", {
         nome: form.nome,
         descricao: form.descricao,
         preco: Number(form.preco),
@@ -45,18 +42,13 @@ const cadastrarProduto = async () => {
         estadoConservacao: form.estadoConservacao,
         quantidade: Number(form.quantidade),
         ativo: true,
-      }
-    );
-
-    console.log("Cadastrado com sucesso:", response.data);
-
-    navigation.goBack();
-
-  } catch (error) {
-    console.log("Erro ao cadastrar:", error);
-  }
-};
-
+      });
+      console.log("Cadastrado:", response.data);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,7 +81,7 @@ const cadastrarProduto = async () => {
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.nome}
-               onChangeText={(text) => handleChange("nome", text)}
+              onChangeText={(text) => handleChange("nome", text)}
             />
           </View>
 
@@ -101,7 +93,7 @@ const cadastrarProduto = async () => {
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.categoria}
-               onChangeText={(text) => handleChange("categoria", text)}
+              onChangeText={(text) => handleChange("categoria", text)}
             />
           </View>
 
@@ -114,7 +106,7 @@ const cadastrarProduto = async () => {
               keyboardType="numeric"
               style={styles.input}
               value={form.preco}
-               onChangeText={(text) => handleChange("preco", text)}
+              onChangeText={(text) => handleChange("preco", text)}
             />
           </View>
 
@@ -126,7 +118,7 @@ const cadastrarProduto = async () => {
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.image}
-               onChangeText={(text) => handleChange("image", text)}
+              onChangeText={(text) => handleChange("image", text)}
             />
           </View>
 
@@ -138,7 +130,7 @@ const cadastrarProduto = async () => {
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.estadoConservacao}
-               onChangeText={(text) => handleChange("estadoConservacao", text)}
+              onChangeText={(text) => handleChange("estadoConservacao", text)}
             />
           </View>
 
@@ -150,7 +142,7 @@ const cadastrarProduto = async () => {
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.usado}
-               onChangeText={(text) => handleChange("usado", text)}
+              onChangeText={(text) => handleChange("usado", text)}
             />
           </View>
 
@@ -163,7 +155,7 @@ const cadastrarProduto = async () => {
               keyboardType="numeric"
               style={styles.input}
               value={form.quantidade}
-               onChangeText={(text) => handleChange("quantidade", text)}
+              onChangeText={(text) => handleChange("quantidade", text)}
             />
           </View>
 
@@ -221,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 18,
   },
-  
+
   containerTitulo: {
     marginBottom: 20,
     gap: 5,
