@@ -6,15 +6,19 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  TextInput,
 } from "react-native";
-import Header from "../components/Header";
-import { ChevronDown } from "lucide-react-native";
+import { useRoute } from "@react-navigation/native";
+import { Bell, ChevronDown, ChevronLeft } from "lucide-react-native";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Produtos() {
+export default function Produtos({navigation}) {
+  const route = useRoute();
+  const buscaInicial = route.params?.busca || "";
   const [produto, setProduto] = useState([]);
+  const [busca, setBusca] = useState(buscaInicial);
 
   useEffect(() => {
     axios
@@ -22,9 +26,29 @@ export default function Produtos() {
       .then((response) => setProduto(response.data));
   }, []);
 
+  const produtosFiltrados = produto.filter((item) =>
+    item.nome.toLowerCase().includes(busca.toLowerCase()),
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <ChevronLeft size={20} color="#ffff"/>
+        </TouchableOpacity>
+
+        <TextInput
+          style={styles.filtro}
+          placeholder="Digite aqui produto"
+          placeholderTextColor="#64748B"
+          value={busca}
+          onChangeText={setBusca}
+        />
+
+        <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
+          <Bell color="#fff" size={20} />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.containerCategoria}>
         <View style={styles.categoria}>
@@ -46,7 +70,7 @@ export default function Produtos() {
         contentContainerStyle={styles.scroll}
       >
         <View style={styles.produtos}>
-          {produto.map((item) => (
+          {produtosFiltrados.map((item) => (
             <TouchableOpacity
               key={item.id}
               style={styles.card}
@@ -75,6 +99,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F1F5F9",
+  },
+  header: {
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 14,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#2563EB",
+    gap: 10,
+  },
+
+  nome: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
+  filtro: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    fontSize: 14,
+    color: "#0F172A",
   },
   containerCategoria: {
     flexDirection: "row",

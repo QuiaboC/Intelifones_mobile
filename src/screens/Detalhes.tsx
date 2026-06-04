@@ -19,11 +19,11 @@ export default function Detalhes({ navigation }) {
   const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-  axios
-    .get(`http://10.0.0.110:8080/produtos/${id}`)
-    .then((response) => setProduto(response.data))
-    .catch((error) => console.log(error));
-}, [id]);
+    axios
+      .get(`http://10.0.0.110:8080/produtos/${id}`)
+      .then((response) => setProduto(response.data))
+      .catch((error) => console.log(error));
+  }, [id]);
 
   console.log(produto);
 
@@ -31,7 +31,7 @@ export default function Detalhes({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ChevronLeft size={30} color="#fff" />
+          <ChevronLeft size={25} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.headerButtons}>
@@ -49,17 +49,12 @@ export default function Detalhes({ navigation }) {
         contentContainerStyle={styles.scroll}
       >
         <View style={styles.containerImagem}>
-          <Image
-            source={{ uri: produto.image }}
-            style={styles.imagem}
-          />
+          <Image source={{ uri: produto.image }} style={styles.imagem} />
         </View>
 
         <View style={styles.containerInfo}>
           <Text style={styles.titulo}>{produto.nome}</Text>
-          <Text style={styles.descricao}>
-            {produto.descricao}
-          </Text>
+          <Text style={styles.descricao}>{produto.descricao}</Text>
           <View style={styles.containerPreco}>
             <Text style={styles.preco}>R$ {produto.preco}</Text>
             <View style={styles.badge}>
