@@ -16,6 +16,7 @@ import Editar from "./src/screens/Editar";
 import PerfilUsuario from "./src/screens/PerfilUsuario";
 import EditarUsuario from "./src/screens/EditarUsuario";
 import FiltroBuscar from "./src/screens/FiltroBuscar";
+import Teste from "./src/screens/Teste";
 import { StatusBar } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
@@ -34,16 +35,17 @@ export default function App() {
           <Stack.Screen name="Registro" component={Registro} />
           <Stack.Screen name="Preview" component={Preview} />
           <Stack.Screen name="Produtos" component={Produtos} />
-          <Stack.Screen name="Carrinho" component={Carrinho}/>
-          <Stack.Screen name="Perfil" component={Perfil}/>
-          <Stack.Screen name="Vendas" component={Vendas}/>
-          <Stack.Screen name="Compras" component={Compras}/>
-          <Stack.Screen name="Detalhes" component={Detalhes}/>
-          <Stack.Screen name="Cadastro" component={Cadastro}/>
-          <Stack.Screen name="Editar" component={Editar}/>
-          <Stack.Screen name="PerfilUsuario" component={PerfilUsuario}/>
-          <Stack.Screen name="EditarUsuario" component={EditarUsuario}/>
-          <Stack.Screen name="FiltroBuscar" component={FiltroBuscar}/>
+          <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Perfil" component={Perfil} />
+          <Stack.Screen name="Vendas" component={Vendas} />
+          <Stack.Screen name="Compras" component={Compras} />
+          <Stack.Screen name="Detalhes" component={Detalhes} />
+          <Stack.Screen name="Cadastro" component={Cadastro} />
+          <Stack.Screen name="Editar" component={Editar} />
+          <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+          <Stack.Screen name="EditarUsuario" component={EditarUsuario} />
+          <Stack.Screen name="FiltroBuscar" component={FiltroBuscar} />
+          <Stack.Screen name="Teste" component={Teste} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

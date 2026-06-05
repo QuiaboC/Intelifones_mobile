@@ -13,11 +13,10 @@ export default function Header() {
         <Text style={styles.nome}>Intelifones</Text>
       </TouchableOpacity>
 
-      <TextInput
+      <TouchableOpacity
         style={styles.filtro}
-        placeholder="Digite aqui"
-        placeholderTextColor="#64748B"
-      />
+        onPress={() => navigation.navigate("FiltroBuscar")}
+      ><Text style={styles.textInput}>Digite aqui</Text></TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
         <Bell color="#fff" size={24} />
@@ -57,4 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#0F172A",
   },
+  textInput: {
+    color: "#64748B",
+  }
 });

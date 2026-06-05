@@ -1,10 +1,14 @@
-import { ShoppingCart, Tag, Sparkles, User } from "lucide-react-native";
+import { ShoppingCart, Tag, Sparkles, PackageOpen } from "lucide-react-native";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ButtonsHome() {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
         <View style={styles.image}>
           <ShoppingCart color="#fff" size={22} />
         </View>
@@ -12,7 +16,7 @@ export default function ButtonsHome() {
           Mais vendidos
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
         <View style={styles.image}>
           <Tag color="#fff" size={22} />
         </View>
@@ -20,7 +24,7 @@ export default function ButtonsHome() {
           Ofertas
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
         <View style={styles.image}>
           <Sparkles color="#fff" size={22} />
         </View>
@@ -28,12 +32,12 @@ export default function ButtonsHome() {
           Novidades
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Teste")}>
         <View style={styles.image}>
-          <User color="#fff" size={22} />
+          <PackageOpen color="#fff" size={22} />
         </View>
         <Text style={styles.text}>
-          Login
+          Meus produtos
         </Text>
       </TouchableOpacity>
     </View>
