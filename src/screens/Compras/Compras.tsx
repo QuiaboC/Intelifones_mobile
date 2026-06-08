@@ -18,7 +18,7 @@ export default function Compras({ navigation }) {
 
   useEffect(() => {
     axios
-      .get("http://10.0.0.110:8080/produtos")
+      .get("http://10.31.35.20:8080/produtos")
       .then((response) => setProduto(response.data))
       .catch((error) => console.log(error));
   }, []);

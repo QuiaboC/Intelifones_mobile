@@ -2,11 +2,11 @@ import axios from "axios";
 import { X } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function FiltroCategoria({
@@ -18,7 +18,7 @@ export default function FiltroCategoria({
 
   useEffect(() => {
     axios
-      .get("http://10.0.0.110:8080/categorias")
+      .get("http://192.168.56.1:8080/categorias")
       .then((response) => setCategoria(response.data))
       .catch((error) => console.log(error));
   }, []);

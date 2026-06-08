@@ -21,7 +21,7 @@ export default function Vendas({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       axios
-        .get("http://10.0.0.110:8080/produtos")
+        .get("http://10.31.35.20:8080/produtos")
         .then((response) => setProduto(response.data))
         .catch((error) => console.log(error));
     }, []),
@@ -29,7 +29,7 @@ export default function Vendas({ navigation }) {
 
   const deletarProduto = async (id) => {
     try {
-      await axios.delete(`http://10.0.0.110:8080/produtos/${id}`);
+      await axios.delete(`http://10.31.35.20:8080/produtos/${id}`);
       setProduto((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
       console.log(error);

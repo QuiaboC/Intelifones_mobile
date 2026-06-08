@@ -32,7 +32,7 @@ export default function ButtonsHome() {
           Novidades
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Teste")}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Vendas")}>
         <View style={styles.image}>
           <PackageOpen color="#fff" size={22} />
         </View>

@@ -1,17 +1,19 @@
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
-  View,
   Text,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
 
 export default function Cadastro({ navigation }) {
+  const [categorias, setCategorias] = useState([]);
   const [form, setForm] = useState({
     nome: "",
     categoria: "",
@@ -30,13 +32,14 @@ export default function Cadastro({ navigation }) {
       [campo]: valor,
     }));
   };
+
   const cadastrarProduto = async () => {
     try {
-      const response = await axios.post("http://10.0.0.110:8080/produtos", {
+      const response = await axios.post("http://10.31.35.20:8080/produtos", {
         nome: form.nome,
         descricao: form.descricao,
         preco: Number(form.preco),
-        categoria: form.categoria,
+        categoria_id: Number(form.categoria),
         image: form.image,
         usado: form.usado.toLowerCase() === "sim",
         estadoConservacao: form.estadoConservacao,
@@ -49,6 +52,13 @@ export default function Cadastro({ navigation }) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    axios
+  .get("http://10.31.35.20:8080/categorias")
+  .then((response) => setCategorias(response.data))
+  .catch((error) => console.log(error));
+  },[])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,13 +98,24 @@ export default function Cadastro({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Categoria</Text>
 
-            <TextInput
-              placeholder="Smartphone, Notebook, Tablet ou Acessório"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={form.categoria}
-              onChangeText={(text) => handleChange("categoria", text)}
-            />
+            <Picker
+  selectedValue={form.categoria}
+  onValueChange={(itemValue) =>
+    handleChange("categoria", itemValue)
+  }
+  style={styles.input}
+>
+  
+  <Picker.Item label="Selecione" value="" />
+
+  {categorias.map((item) => (
+    <Picker.Item
+      key={item.id}
+      label={item.nome}
+      value={item.id}
+    />
+  ))}
+</Picker>
           </View>
 
           <View style={styles.containerInput}>
@@ -125,25 +146,34 @@ export default function Cadastro({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Estado de Conservação</Text>
 
-            <TextInput
-              placeholder="Novo, Seminovo ou Usado"
-              placeholderTextColor="#64748B"
+            <Picker
+              selectedValue={form.estadoConservacao}
+              onValueChange={(itemValue) =>
+                handleChange("estadoConservacao", itemValue)
+              }
               style={styles.input}
-              value={form.estadoConservacao}
-              onChangeText={(text) => handleChange("estadoConservacao", text)}
-            />
+            >
+              <Picker.Item label="Selecione" value="" />
+              <Picker.Item label="Novo" value="NOVO" />
+              <Picker.Item label="Seminovo" value="SEMINOVO" />
+              <Picker.Item label="Usado" value="USADO" />
+            </Picker>
           </View>
 
           <View style={styles.containerInput}>
             <Text style={styles.label}>Produto Usado?</Text>
 
-            <TextInput
-              placeholder="Sim ou Não"
-              placeholderTextColor="#64748B"
+            <Picker
+              selectedValue={form.usado}
+              onValueChange={(itemValue) =>
+                handleChange("usado", itemValue)
+              }
               style={styles.input}
-              value={form.usado}
-              onChangeText={(text) => handleChange("usado", text)}
-            />
+            >
+              <Picker.Item label="Selecione" value="" />
+              <Picker.Item label="Sim" value="SIM" />
+              <Picker.Item label="Não" value="NÃO" />
+            </Picker>
           </View>
 
           <View style={styles.containerInput}>

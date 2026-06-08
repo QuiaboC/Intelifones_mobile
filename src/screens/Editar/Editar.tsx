@@ -1,13 +1,14 @@
+import { Picker } from "@react-native-picker/picker";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
   ScrollView,
-  View,
   Text,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
@@ -15,9 +16,10 @@ import { styles } from "./style";
 export default function Editar({ navigation }) {
   const route = useRoute();
   const { id } = route.params;
+  const [categorias, setCategorias] = useState([]);
   const [form, setForm] = useState({
     nome: "",
-    categoria: "",
+    categoria_id: "",
     preco: "",
     descricao: "",
     image: "",
@@ -28,11 +30,32 @@ export default function Editar({ navigation }) {
   });
 
   useEffect(() => {
-    axios
-      .get(`http://10.0.0.110:8080/produtos/${id}`)
-      .then((response) => setForm(response.data))
-      .catch((error) => console.log(error));
-  }, [id]);
+  axios
+    .get(`http://10.31.35.20:8080/produtos/${id}`)
+    .then((response) => {
+      const produto = response.data;
+
+      setForm({
+        nome: produto.nome || "",
+        categoria_id: produto.categoria?.id || "",
+        preco: String(produto.preco || ""),
+        descricao: produto.descricao || "",
+        image: produto.image || "",
+        usado: produto.usado ? "SIM" : "NÃO",
+        estadoConservacao:
+          (produto.estadoConservacao || "").toUpperCase(),
+        quantidade: String(produto.quantidade || ""),
+        ativo: produto.ativo ?? true,
+      });
+    })
+    .catch((error) => console.log(error));
+
+  axios
+    .get("http://192.168.56.1:8080/categorias")
+    .then((response) => setCategorias(response.data))
+    .catch((error) => console.log(error));
+}, [id]);
+
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
       ...prev,
@@ -40,32 +63,29 @@ export default function Editar({ navigation }) {
     }));
   };
   const EditarPerfil = async (id) => {
-    try {
-      const response = await axios.put(
-        `http://10.0.0.110:8080/produtos/${id}`,
-        {
-          nome: form.nome,
-          descricao: form.descricao,
-          preco: Number(form.preco),
-          categoria: form.categoria,
-          image: form.image,
-          usado:
-            typeof form.usado === "boolean"
-              ? form.usado
-              : form.usado.toLowerCase() === "sim",
-          estadoConservacao: form.estadoConservacao,
-          quantidade: Number(form.quantidade),
-          ativo: true,
-        },
-      );
+  try {
+    const response = await axios.put(
+      `http://10.31.35.20:8080/produtos/${id}`,
+      {
+        nome: form.nome,
+        descricao: form.descricao,
+        preco: Number(form.preco),
+        categoria: form.categoria_id, 
+        image: form.image,
+        usado: form.usado === "SIM",
+        estadoConservacao: form.estadoConservacao,
+        quantidade: Number(form.quantidade),
+        ativo: true,
+      }
+    );
 
-      console.log("Editado com sucesso:", response.data);
+    console.log("Editado com sucesso:", response.data);
 
-      navigation.goBack();
-    } catch (error) {
-      console.log("Erro ao cadastrar:", error);
-    }
-  };
+    navigation.goBack();
+  } catch (error) {
+    console.log("Erro ao salvar:", error?.response?.data || error);
+  }
+};
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -104,13 +124,24 @@ export default function Editar({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Categoria</Text>
 
-            <TextInput
-              placeholder="Smartphone, Notebook, Tablet ou Acessório"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={form.categoria}
-              onChangeText={(text) => handleChange("categoria", text)}
-            />
+            <Picker
+  selectedValue={form.categoria_id}
+  onValueChange={(itemValue) =>
+    handleChange("categoria_id", itemValue)
+  }
+  style={styles.input}
+>
+  
+  <Picker.Item label="Selecione" value="" />
+
+  {categorias.map((item) => (
+    <Picker.Item
+      key={item.id}
+      label={item.nome}
+      value={item.id}
+    />
+  ))}
+</Picker>
           </View>
 
           <View style={styles.containerInput}>
@@ -141,25 +172,34 @@ export default function Editar({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Estado de Conservação</Text>
 
-            <TextInput
-              placeholder="Novo, Seminovo ou Usado"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={form.estadoConservacao}
-              onChangeText={(text) => handleChange("estadoConservacao", text)}
-            />
+            <Picker
+  selectedValue={form.estadoConservacao}
+  onValueChange={(itemValue) =>
+    handleChange("estadoConservacao", itemValue)
+  }
+  style={styles.input}
+>
+  <Picker.Item label="Selecione" value="" />
+  <Picker.Item label="Novo" value="Novo" />
+  <Picker.Item label="Seminovo" value="Semi Novo" />
+  <Picker.Item label="Usado" value="Usado" />
+</Picker>
           </View>
 
           <View style={styles.containerInput}>
             <Text style={styles.label}>Produto Usado?</Text>
 
-            <TextInput
-              placeholder="Sim ou Não"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={String(form.usado)}
-              onChangeText={(text) => handleChange("usado", text)}
-            />
+            <Picker
+                          selectedValue={form.usado}
+                          onValueChange={(itemValue) =>
+                            handleChange("usado", itemValue)
+                          }
+                          style={styles.input}
+                        >
+                          <Picker.Item label="Selecione" value="" />
+                          <Picker.Item label="Sim" value="Sim" />
+                          <Picker.Item label="Não" value="Não" />
+                        </Picker>
           </View>
 
           <View style={styles.containerInput}>
