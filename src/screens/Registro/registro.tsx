@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeft } from "lucide-react-native";
 import { useState } from "react";
 import axios from "axios";
-import { style } from "../../styles/registro";
+import { style } from "./style";
 
 export default function Registro({ navigation }) {
   const [form, setForm] = useState({

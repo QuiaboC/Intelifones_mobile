@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { style } from "../../styles/preview";
+import { style } from "./style";
 
 export default function Preview({ navigation }) {
   return (
@@ -14,7 +14,7 @@ export default function Preview({ navigation }) {
       <SafeAreaView style={style.container}>
         <View style={style.hero}>
           <Image
-            source={require("../../assets/vetorHome.png")}
+            source={require("../../../assets/vetorHome.png")}
             style={style.imagem}
           />
 

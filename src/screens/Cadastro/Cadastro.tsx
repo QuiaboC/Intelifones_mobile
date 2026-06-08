@@ -1,7 +1,6 @@
-import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ScrollView,
   View,
@@ -10,11 +9,9 @@ import {
   TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles/editar";
+import { styles } from "./style";
 
-export default function Editar({ navigation }) {
-  const route = useRoute();
-  const { id } = route.params;
+export default function Cadastro({ navigation }) {
   const [form, setForm] = useState({
     nome: "",
     categoria: "",
@@ -27,45 +24,32 @@ export default function Editar({ navigation }) {
     ativo: "",
   });
 
-  useEffect(() => {
-    axios
-      .get(`http://10.0.0.110:8080/produtos/${id}`)
-      .then((response) => setForm(response.data))
-      .catch((error) => console.log(error));
-  }, [id]);
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
       ...prev,
       [campo]: valor,
     }));
   };
-  const EditarPerfil = async (id) => {
+  const cadastrarProduto = async () => {
     try {
-      const response = await axios.put(
-        `http://10.0.0.110:8080/produtos/${id}`,
-        {
-          nome: form.nome,
-          descricao: form.descricao,
-          preco: Number(form.preco),
-          categoria: form.categoria,
-          image: form.image,
-          usado:
-            typeof form.usado === "boolean"
-              ? form.usado
-              : form.usado.toLowerCase() === "sim",
-          estadoConservacao: form.estadoConservacao,
-          quantidade: Number(form.quantidade),
-          ativo: true,
-        },
-      );
-
-      console.log("Editado com sucesso:", response.data);
-
+      const response = await axios.post("http://10.0.0.110:8080/produtos", {
+        nome: form.nome,
+        descricao: form.descricao,
+        preco: Number(form.preco),
+        categoria: form.categoria,
+        image: form.image,
+        usado: form.usado.toLowerCase() === "sim",
+        estadoConservacao: form.estadoConservacao,
+        quantidade: Number(form.quantidade),
+        ativo: true,
+      });
+      console.log("Cadastrado:", response.data);
       navigation.goBack();
     } catch (error) {
-      console.log("Erro ao cadastrar:", error);
+      console.log(error);
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -73,7 +57,7 @@ export default function Editar({ navigation }) {
           <ChevronLeft size={30} color="#fff" />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitulo}>Editar</Text>
+        <Text style={styles.headerTitulo}>Cadastro</Text>
       </View>
 
       <ScrollView
@@ -82,10 +66,10 @@ export default function Editar({ navigation }) {
       >
         <View style={styles.card}>
           <View style={styles.containerTitulo}>
-            <Text style={styles.nome}>Editar Produto</Text>
+            <Text style={styles.nome}>Cadastrar Produto</Text>
 
             <Text style={styles.subtitulo}>
-              Atualize as informações do seu produto.
+              Cadastre seu produto para vender na plataforma
             </Text>
           </View>
 
@@ -121,7 +105,7 @@ export default function Editar({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
-              value={String(form.preco)}
+              value={form.preco}
               onChangeText={(text) => handleChange("preco", text)}
             />
           </View>
@@ -157,7 +141,7 @@ export default function Editar({ navigation }) {
               placeholder="Sim ou Não"
               placeholderTextColor="#64748B"
               style={styles.input}
-              value={String(form.usado)}
+              value={form.usado}
               onChangeText={(text) => handleChange("usado", text)}
             />
           </View>
@@ -170,7 +154,7 @@ export default function Editar({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
-              value={String(form.quantidade)}
+              value={form.quantidade}
               onChangeText={(text) => handleChange("quantidade", text)}
             />
           </View>
@@ -190,11 +174,8 @@ export default function Editar({ navigation }) {
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => EditarPerfil(id)}
-          >
-            <Text style={styles.buttonText}>Salvar Alterações</Text>
+          <TouchableOpacity style={styles.button} onPress={cadastrarProduto}>
+            <Text style={styles.buttonText}>Cadastrar Produto</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

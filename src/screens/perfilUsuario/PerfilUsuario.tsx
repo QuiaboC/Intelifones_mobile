@@ -10,7 +10,7 @@ import {
 } from "lucide-react-native";
 import { ScrollView, View, Text, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles/perfilUsuario";
+import { styles } from "./style";
 
 export default function PerfilUsuario({ navigation }) {
   const opcoes = [
@@ -59,7 +59,7 @@ export default function PerfilUsuario({ navigation }) {
       <View style={styles.containerPerfil}>
         <View style={styles.containerImagem}>
           <Image
-            source={require("../../assets/vetorHome.png")}
+            source={require("../../../assets/vetorHome.png")}
             style={styles.imagem}
           />
         </View>

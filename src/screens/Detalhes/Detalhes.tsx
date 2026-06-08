@@ -1,11 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Bell, ChevronLeft, ShoppingCart } from "lucide-react-native";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { styles } from "../../styles/detalhes";
+import { styles } from "./style";
 
 export default function Detalhes({ navigation }) {
   const route = useRoute();

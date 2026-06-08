@@ -12,7 +12,7 @@ import { ChevronLeft, Edit, Plus, Trash } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-import { styles } from "../../styles/vendas";
+import { styles } from "./style";
 
 export default function Vendas({ navigation }) {
   const [produto, setProduto] = useState([]);

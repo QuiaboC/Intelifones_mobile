@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, View, Text, Image, TouchableOpacity } from "react-native";
 import { ChevronLeft, ShoppingCart, Trash } from "lucide-react-native";
-import { styles } from "../../styles/carrinho";
+import { styles } from "./style";
 
 export default function Carrinho({ navigation }) {
   return (
@@ -31,7 +31,7 @@ export default function Carrinho({ navigation }) {
           <View key={item} style={styles.produtoCarrinho}>
             <View style={styles.containerImagem}>
               <Image
-                source={require("../../assets/vetorHome.png")}
+                source={require("../../../assets/vetorHome.png")}
                 style={styles.imagem}
               />
             </View>

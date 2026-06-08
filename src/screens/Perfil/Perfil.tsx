@@ -1,8 +1,7 @@
 import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Footer from "../components/Footer";
-import { styles } from "../../styles/perfil";
-
+import Footer from "../../components/Footer";
+import { styles } from "./style";
 import {
   ChevronRight,
   Package,
@@ -62,7 +61,7 @@ export default function Perfil({ navigation }) {
       <View style={styles.containerPerfil}>
         <View style={styles.ContainerImagem}>
           <Image
-            source={require("../../assets/vetorHome.png")}
+            source={require("../../../assets/vetorHome.png")}
             style={styles.imagem}
           />
         </View>

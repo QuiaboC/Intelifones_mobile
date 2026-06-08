@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles/editarUsuario";
+import { styles } from "./style";
 
 export default function EditarUsuario({ navigation }) {
   const [form, setForm] = useState({

@@ -1,11 +1,11 @@
 import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { LinearGradient } from "expo-linear-gradient";
-import ButtonsHome from "../components/ButtonsHome";
-import CardProduto from "../components/CardProduto";
-import Footer from "../components/Footer";
-import { styles } from "../../styles/home";
+import ButtonsHome from "../../components/ButtonsHome";
+import CardProduto from "../../components/CardProduto";
+import Footer from "../../components/Footer";
+import { styles } from "./style";
 
 export default function Home({ navigation }) {
   return (
@@ -23,7 +23,7 @@ export default function Home({ navigation }) {
           </Text>
 
           <Image
-            source={require("../../assets/vetorCadastro.png")}
+            source={require("../../../assets/vetorCadastro.png")}
             style={styles.imagem}
           />
         </LinearGradient>

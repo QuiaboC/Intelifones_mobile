@@ -8,7 +8,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { ChevronLeft } from "lucide-react-native";
-import { style } from "../../styles/login";
+import { style } from "./style";
 
 export default function Login({ navigation }) {
   return (

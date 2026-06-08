@@ -1,6 +1,7 @@
+import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -9,9 +10,11 @@ import {
   TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../styles/cadastro";
+import { styles } from "./style";
 
-export default function Cadastro({ navigation }) {
+export default function Editar({ navigation }) {
+  const route = useRoute();
+  const { id } = route.params;
   const [form, setForm] = useState({
     nome: "",
     categoria: "",
@@ -24,32 +27,45 @@ export default function Cadastro({ navigation }) {
     ativo: "",
   });
 
+  useEffect(() => {
+    axios
+      .get(`http://10.0.0.110:8080/produtos/${id}`)
+      .then((response) => setForm(response.data))
+      .catch((error) => console.log(error));
+  }, [id]);
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
       ...prev,
       [campo]: valor,
     }));
   };
-  const cadastrarProduto = async () => {
+  const EditarPerfil = async (id) => {
     try {
-      const response = await axios.post("http://10.0.0.110:8080/produtos", {
-        nome: form.nome,
-        descricao: form.descricao,
-        preco: Number(form.preco),
-        categoria: form.categoria,
-        image: form.image,
-        usado: form.usado.toLowerCase() === "sim",
-        estadoConservacao: form.estadoConservacao,
-        quantidade: Number(form.quantidade),
-        ativo: true,
-      });
-      console.log("Cadastrado:", response.data);
+      const response = await axios.put(
+        `http://10.0.0.110:8080/produtos/${id}`,
+        {
+          nome: form.nome,
+          descricao: form.descricao,
+          preco: Number(form.preco),
+          categoria: form.categoria,
+          image: form.image,
+          usado:
+            typeof form.usado === "boolean"
+              ? form.usado
+              : form.usado.toLowerCase() === "sim",
+          estadoConservacao: form.estadoConservacao,
+          quantidade: Number(form.quantidade),
+          ativo: true,
+        },
+      );
+
+      console.log("Editado com sucesso:", response.data);
+
       navigation.goBack();
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao cadastrar:", error);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -57,7 +73,7 @@ export default function Cadastro({ navigation }) {
           <ChevronLeft size={30} color="#fff" />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitulo}>Cadastro</Text>
+        <Text style={styles.headerTitulo}>Editar</Text>
       </View>
 
       <ScrollView
@@ -66,10 +82,10 @@ export default function Cadastro({ navigation }) {
       >
         <View style={styles.card}>
           <View style={styles.containerTitulo}>
-            <Text style={styles.nome}>Cadastrar Produto</Text>
+            <Text style={styles.nome}>Editar Produto</Text>
 
             <Text style={styles.subtitulo}>
-              Cadastre seu produto para vender na plataforma
+              Atualize as informações do seu produto.
             </Text>
           </View>
 
@@ -105,7 +121,7 @@ export default function Cadastro({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
-              value={form.preco}
+              value={String(form.preco)}
               onChangeText={(text) => handleChange("preco", text)}
             />
           </View>
@@ -141,7 +157,7 @@ export default function Cadastro({ navigation }) {
               placeholder="Sim ou Não"
               placeholderTextColor="#64748B"
               style={styles.input}
-              value={form.usado}
+              value={String(form.usado)}
               onChangeText={(text) => handleChange("usado", text)}
             />
           </View>
@@ -154,7 +170,7 @@ export default function Cadastro({ navigation }) {
               placeholderTextColor="#64748B"
               keyboardType="numeric"
               style={styles.input}
-              value={form.quantidade}
+              value={String(form.quantidade)}
               onChangeText={(text) => handleChange("quantidade", text)}
             />
           </View>
@@ -174,8 +190,11 @@ export default function Cadastro({ navigation }) {
             />
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={cadastrarProduto}>
-            <Text style={styles.buttonText}>Cadastrar Produto</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => EditarPerfil(id)}
+          >
+            <Text style={styles.buttonText}>Salvar Alterações</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

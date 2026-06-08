@@ -10,7 +10,7 @@ import {
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { styles } from "../../styles/compras";
+import { styles } from "./style";
 
 export default function Compras({ navigation }) {
   const [produto, setProduto] = useState([]);

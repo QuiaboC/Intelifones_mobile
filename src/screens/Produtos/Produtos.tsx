@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Bell, ChevronDown, ChevronLeft } from "lucide-react-native";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { styles } from "../../styles/produtos";
-import FiltroCategoria from "../components/FiltroCategoria";
+import { styles } from "./style";
+import FiltroCategoria from "../../components/FiltroCategoria";
 
 export default function Produtos({ navigation }) {
   const route = useRoute();
