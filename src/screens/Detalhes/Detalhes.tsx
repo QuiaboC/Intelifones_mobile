@@ -4,7 +4,7 @@ import { Bell, ChevronLeft, ShoppingCart } from "lucide-react-native";
 import Footer from "../../components/Footer";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { styles } from "./style";
 
 export default function Detalhes({ navigation }) {
@@ -13,8 +13,8 @@ export default function Detalhes({ navigation }) {
   const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://10.31.35.20:8080/produtos/${id}`)
+    api
+      .get(`/produtos/${id}`)
       .then((response) => setProduto(response.data))
       .catch((error) => console.log(error));
   }, [id]);

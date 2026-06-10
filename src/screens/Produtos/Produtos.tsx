@@ -11,7 +11,7 @@ import { useRoute } from "@react-navigation/native";
 import { Bell, ChevronDown, ChevronLeft } from "lucide-react-native";
 import Footer from "../../components/Footer";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { styles } from "./style";
 import FiltroCategoria from "../../components/FiltroCategoria";
 
@@ -24,8 +24,8 @@ export default function Produtos({ navigation }) {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("http://10.31.35.20:8080/produtos")
+    api
+      .get("/produtos/disponiveis")
       .then((response) => setProduto(response.data));
   }, []);
 
@@ -34,7 +34,7 @@ export default function Produtos({ navigation }) {
 
     const filtroCategoria =
       categoriaSelecionada === null ||
-      String(item.categoria_id) === String(categoriaSelecionada);
+      String(item.categoria?.id) === String(categoriaSelecionada);
 
     return filtroBusca && filtroCategoria;
   });
@@ -87,6 +87,7 @@ export default function Produtos({ navigation }) {
               key={item.id}
               style={styles.card}
               activeOpacity={0.8}
+              onPress={() => navigation.navigate("Detalhes", { id: item.id})}
             >
               <Image source={{ uri: item.image }} style={styles.imagem} />
               <View style={styles.info}>

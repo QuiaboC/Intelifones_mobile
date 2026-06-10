@@ -12,6 +12,8 @@ import { ChevronLeft } from "lucide-react-native";
 import { useState } from "react";
 import axios from "axios";
 import { style } from "./style";
+import api from "../../../services/api";
+import { salvarToken } from "../../../services/auth";
 
 export default function Registro({ navigation }) {
   const [form, setForm] = useState({
@@ -21,7 +23,6 @@ export default function Registro({ navigation }) {
     endereco: "",
     senha: "",
     confirmarSenha: "",
-    ativo: "",
   });
 
   const handleChange = (campo, valor) => {
@@ -32,23 +33,27 @@ export default function Registro({ navigation }) {
   };
 
   const cadastrarUsuario = async () => {
-    if (form.senha !== form.confirmarSenha) {
-      alert("As senhas não coincidem");
-      return;
-    }
+    if (!form.nome.trim()) return alert("Informe o nome");
+    if (!form.email.trim()) return alert("Informe o email");
+    if (form.senha.length < 6)
+      return alert("A senha deve ter pelo menos 6 caracteres");
+    if (form.senha !== form.confirmarSenha)
+      return alert("As senhas não coincidem");
+
     try {
-      const response = await axios.post("http://10.0.0.110:8080/vendedores", {
+      const response = await api.post("/auth/register", {
         nome: form.nome,
         email: form.email,
-        telefone: form.telefone,
-        endereco: form.email,
         senha: form.senha,
-        ativo: true,
+        telefone: form.telefone,
+        endereco: form.endereco,
+        role: "VENDEDOR",
       });
-      console.log("cadastrado com sucesso", response.data);
-      navigation.navigate("Login");
+
+      await salvarToken(response.data.token);
+      navigation.replace("Login");
     } catch (error) {
-      console.log(error);
+      alert("Erro ao cadastrar. Verifique os dados.");
     }
   };
 
@@ -68,92 +73,98 @@ export default function Registro({ navigation }) {
           <Text style={style.logo}>Registro</Text>
         </View>
 
-        <View style={style.container}>
-          <View style={style.containerTitulo}>
-            <Text style={style.titulo}>Crie sua conta</Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ width: "100%" }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={style.container}>
+            <View style={style.containerTitulo}>
+              <Text style={style.titulo}>Crie sua conta</Text>
 
-            <Text style={style.subtitulo}>
-              Cadastre-se para aproveitar as melhores ofertas
-            </Text>
-          </View>
+              <Text style={style.subtitulo}>
+                Cadastre-se para aproveitar as melhores ofertas
+              </Text>
+            </View>
 
-          <View style={style.containerInput}>
-            <Text style={style.label}>Nome</Text>
-            <TextInput
-              placeholder="Digite seu nome"
-              placeholderTextColor="#64748B"
-              style={style.input}
-              value={form.nome}
-              onChangeText={(text) => handleChange("nome", text)}
-            />
-          </View>
-          <View style={style.containerInput}>
-            <Text style={style.label}>Email</Text>
-            <TextInput
-              placeholder="seuemail@gmail.com"
-              placeholderTextColor="#64748B"
-              keyboardType="email-address"
-              style={style.input}
-              value={form.email}
-              onChangeText={(text) => handleChange("email", text)}
-            />
-          </View>
-          <View style={style.containerInput}>
-            <Text style={style.label}>Telefone</Text>
-            <TextInput
-              placeholder="(81) 99999-9999"
-              placeholderTextColor="#64748B"
-              keyboardType="phone-pad"
-              style={style.input}
-              value={form.telefone}
-              onChangeText={(text) => handleChange("telefone", text)}
-            />
-          </View>
-          <View style={style.containerInput}>
-            <Text style={style.label}>Endereço</Text>
-            <TextInput
-              placeholder="Digite seu endereço"
-              placeholderTextColor="#64748B"
-              style={style.input}
-              value={form.endereco}
-              onChangeText={(text) => handleChange("endereco", text)}
-            />
-          </View>
-          <View style={style.containerInput}>
-            <Text style={style.label}>Senha</Text>
-            <TextInput
-              placeholder="Senha"
-              placeholderTextColor="#64748B"
-              secureTextEntry
-              style={style.input}
-              value={form.senha}
-              onChangeText={(text) => handleChange("senha", text)}
-            />
-          </View>
-          <View style={style.containerInput}>
-            <Text style={style.label}>Confirmar senha</Text>
-            <TextInput
-              placeholder="Confirmar senha"
-              placeholderTextColor="#64748B"
-              secureTextEntry
-              style={style.input}
-              value={form.confirmarSenha}
-              onChangeText={(text) => handleChange("confirmarSenha", text)}
-            />
-          </View>
-          <View style={style.containerButton}>
-            <TouchableOpacity style={style.button} onPress={cadastrarUsuario}>
-              <Text style={style.textButton}>Cadastrar</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={style.footerText}>
-            <Text style={style.textFooter}>Já possui uma conta?</Text>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Nome</Text>
+              <TextInput
+                placeholder="Digite seu nome"
+                placeholderTextColor="#64748B"
+                style={style.input}
+                value={form.nome}
+                onChangeText={(text) => handleChange("nome", text)}
+              />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Email</Text>
+              <TextInput
+                placeholder="seuemail@gmail.com"
+                placeholderTextColor="#64748B"
+                keyboardType="email-address"
+                style={style.input}
+                value={form.email}
+                onChangeText={(text) => handleChange("email", text)}
+              />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Telefone</Text>
+              <TextInput
+                placeholder="(81) 99999-9999"
+                placeholderTextColor="#64748B"
+                keyboardType="phone-pad"
+                style={style.input}
+                value={form.telefone}
+                onChangeText={(text) => handleChange("telefone", text)}
+              />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Endereço</Text>
+              <TextInput
+                placeholder="Digite seu endereço"
+                placeholderTextColor="#64748B"
+                style={style.input}
+                value={form.endereco}
+                onChangeText={(text) => handleChange("endereco", text)}
+              />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Senha</Text>
+              <TextInput
+                placeholder="Senha"
+                placeholderTextColor="#64748B"
+                secureTextEntry
+                style={style.input}
+                value={form.senha}
+                onChangeText={(text) => handleChange("senha", text)}
+              />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Confirmar senha</Text>
+              <TextInput
+                placeholder="Confirmar senha"
+                placeholderTextColor="#64748B"
+                secureTextEntry
+                style={style.input}
+                value={form.confirmarSenha}
+                onChangeText={(text) => handleChange("confirmarSenha", text)}
+              />
+            </View>
+            <View style={style.containerButton}>
+              <TouchableOpacity style={style.button} onPress={cadastrarUsuario}>
+                <Text style={style.textButton}>Cadastrar</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.footerText}>
+              <Text style={style.textFooter}>Já possui uma conta?</Text>
 
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={style.loginText}>Login</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <Text style={style.loginText}>Login</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );

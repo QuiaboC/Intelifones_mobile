@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import api from "../../services/api";
 
 export default function CardProduto() {
 
@@ -9,8 +10,7 @@ export default function CardProduto() {
   const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-    axios
-    .get("http://10.31.35.20:8080/produtos")
+    api.get("/produtos/disponiveis")
     .then((response) => setProduto(response.data))
   },[])
 

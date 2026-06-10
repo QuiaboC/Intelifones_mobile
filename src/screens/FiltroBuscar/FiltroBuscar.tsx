@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../../services/api";
 import { ChevronLeft, Search } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
@@ -16,8 +16,8 @@ export default function FiltroBuscar({ navigation }) {
   const [busca, setBusca] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://10.31.35.20:8080/produtos")
+    api
+      .get("/produtos")
       .then((response) => setProduto(response.data))
       .catch((error) => console.log(error));
   }, []);

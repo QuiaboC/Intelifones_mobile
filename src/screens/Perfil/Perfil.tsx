@@ -12,8 +12,26 @@ import {
   Handbag,
   Info,
 } from "lucide-react-native";
+import { removerToken } from "../../../services/auth";
+import { useEffect, useState } from "react";
+import api from "../../../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Perfil({ navigation }) {
+  const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    async function carregarUsuario() {
+      const usuarioSalvo = await AsyncStorage.getItem("@usuario");
+
+      if (usuarioSalvo) {
+        setUsuario(JSON.parse(usuarioSalvo));
+      }
+    }
+
+    carregarUsuario();
+  }, []);
+
   const atividades = [
     {
       id: 1,
@@ -56,6 +74,11 @@ export default function Perfil({ navigation }) {
     },
   ];
 
+  const logout = async () => {
+    await removerToken();
+    navigation.replace("Login");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerPerfil}>
@@ -67,7 +90,10 @@ export default function Perfil({ navigation }) {
         </View>
 
         <View style={styles.infoPerfil}>
-          <Text style={styles.NomePerfil}>Cleiton Paixão</Text>
+          <Text style={styles.NomePerfil}>
+            {" "}
+            {usuario?.nome}
+          </Text>
 
           <TouchableOpacity
             style={styles.buttonPerfil}
@@ -136,7 +162,9 @@ export default function Perfil({ navigation }) {
         <TouchableOpacity style={styles.logoutButton}>
           <LogOut size={20} color="#EF4444" />
 
-          <Text style={styles.logoutText}>Sair da conta</Text>
+          <Text style={styles.logoutText} onPress={logout}>
+            Sair da conta
+          </Text>
         </TouchableOpacity>
       </ScrollView>
 

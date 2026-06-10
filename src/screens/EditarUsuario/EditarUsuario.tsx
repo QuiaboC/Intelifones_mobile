@@ -13,10 +13,9 @@ import { styles } from "./style";
 export default function EditarUsuario({ navigation }) {
   const [form, setForm] = useState({
     nome: "",
-    email: "",
     telefone: "",
     cpfCnpj: "",
-    senha: "",
+    endereco: "",
     ativo: "",
   });
 
@@ -83,6 +82,18 @@ export default function EditarUsuario({ navigation }) {
                 style={styles.input}
                 value={form.cpfCnpj}
                 onChangeText={(text) => handleChange("cpfCnpj", text)}
+              />
+            </View>
+
+            <View style={styles.containerInput}>
+              <Text style={styles.label}>Endereço</Text>
+
+              <TextInput
+                placeholder="Endereço"
+                placeholderTextColor="#64748B"
+                style={styles.input}
+                value={form.endereco}
+                onChangeText={(text) => handleChange("endereco", text)}
               />
             </View>
           </View>

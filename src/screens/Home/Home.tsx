@@ -6,8 +6,12 @@ import ButtonsHome from "../../components/ButtonsHome";
 import CardProduto from "../../components/CardProduto";
 import Footer from "../../components/Footer";
 import { styles } from "./style";
+import { useEffect } from "react";
+import { obterToken } from "../../../services/auth";
 
 export default function Home({ navigation }) {
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>

@@ -18,7 +18,7 @@ export default function FiltroCategoria({
 
   useEffect(() => {
     axios
-      .get("http://192.168.56.1:8080/categorias")
+      .get("http://localhost:8080/api/categorias")
       .then((response) => setCategoria(response.data))
       .catch((error) => console.log(error));
   }, []);

@@ -11,19 +11,17 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
+import api from "../../../services/api";
 
 export default function Cadastro({ navigation }) {
   const [categorias, setCategorias] = useState([]);
   const [form, setForm] = useState({
     nome: "",
-    categoria: "",
+    categoria_id: "",
     preco: "",
     descricao: "",
-    image: "",
-    usado: "",
-    estadoConservacao: "",
+    usado: false,
     quantidade: "",
-    ativo: "",
   });
 
   const handleChange = (campo, valor) => {
@@ -35,30 +33,28 @@ export default function Cadastro({ navigation }) {
 
   const cadastrarProduto = async () => {
     try {
-      const response = await axios.post("http://10.31.35.20:8080/produtos", {
+      const response = await api.post("/produtos", {
         nome: form.nome,
         descricao: form.descricao,
         preco: Number(form.preco),
-        categoria_id: Number(form.categoria),
-        image: form.image,
-        usado: form.usado.toLowerCase() === "sim",
-        estadoConservacao: form.estadoConservacao,
         quantidade: Number(form.quantidade),
-        ativo: true,
+        usado: form.usado,
+        categoria_id: Number(form.categoria_id),
       });
+
       console.log("Cadastrado:", response.data);
       navigation.goBack();
     } catch (error) {
-      console.log(error);
+      console.log(error?.response?.data || error);
     }
   };
 
   useEffect(() => {
-    axios
-  .get("http://10.31.35.20:8080/categorias")
-  .then((response) => setCategorias(response.data))
-  .catch((error) => console.log(error));
-  },[])
+    api
+      .get("/categorias")
+      .then((response) => setCategorias(response.data))
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,23 +95,16 @@ export default function Cadastro({ navigation }) {
             <Text style={styles.label}>Categoria</Text>
 
             <Picker
-  selectedValue={form.categoria}
-  onValueChange={(itemValue) =>
-    handleChange("categoria", itemValue)
-  }
-  style={styles.input}
->
-  
-  <Picker.Item label="Selecione" value="" />
+              selectedValue={form.categoria_id}
+              onValueChange={(value) => handleChange("categoria_id", value)}
+              style={styles.input}
+            >
+              <Picker.Item label="Selecione" value="" />
 
-  {categorias.map((item) => (
-    <Picker.Item
-      key={item.id}
-      label={item.nome}
-      value={item.id}
-    />
-  ))}
-</Picker>
+              {categorias.map((item) => (
+                <Picker.Item key={item.id} label={item.nome} value={item.id} />
+              ))}
+            </Picker>
           </View>
 
           <View style={styles.containerInput}>
@@ -132,47 +121,16 @@ export default function Cadastro({ navigation }) {
           </View>
 
           <View style={styles.containerInput}>
-            <Text style={styles.label}>Imagem</Text>
-
-            <TextInput
-              placeholder="URL da imagem"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={form.image}
-              onChangeText={(text) => handleChange("image", text)}
-            />
-          </View>
-
-          <View style={styles.containerInput}>
-            <Text style={styles.label}>Estado de Conservação</Text>
-
-            <Picker
-              selectedValue={form.estadoConservacao}
-              onValueChange={(itemValue) =>
-                handleChange("estadoConservacao", itemValue)
-              }
-              style={styles.input}
-            >
-              <Picker.Item label="Selecione" value="" />
-              <Picker.Item label="Novo" value="NOVO" />
-              <Picker.Item label="Seminovo" value="SEMINOVO" />
-              <Picker.Item label="Usado" value="USADO" />
-            </Picker>
-          </View>
-
-          <View style={styles.containerInput}>
             <Text style={styles.label}>Produto Usado?</Text>
 
             <Picker
               selectedValue={form.usado}
-              onValueChange={(itemValue) =>
-                handleChange("usado", itemValue)
-              }
+              onValueChange={(value) => handleChange("usado", value)}
               style={styles.input}
             >
-              <Picker.Item label="Selecione" value="" />
-              <Picker.Item label="Sim" value="SIM" />
-              <Picker.Item label="Não" value="NÃO" />
+              <Picker.Item label="Selecione" value={null} />
+              <Picker.Item label="Sim" value={true} />
+              <Picker.Item label="Não" value={false} />
             </Picker>
           </View>
 

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { ChevronLeft, Edit, Plus, Trash } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { useFocusEffect } from "@react-navigation/native";
 import { styles } from "./style";
 
@@ -20,8 +20,8 @@ export default function Vendas({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      axios
-        .get("http://10.31.35.20:8080/produtos")
+      api
+        .get("/produtos/meus")
         .then((response) => setProduto(response.data))
         .catch((error) => console.log(error));
     }, []),
@@ -29,7 +29,7 @@ export default function Vendas({ navigation }) {
 
   const deletarProduto = async (id) => {
     try {
-      await axios.delete(`http://10.31.35.20:8080/produtos/${id}`);
+      await api.delete(`/produtos/${id}`);
       setProduto((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
       console.log(error);

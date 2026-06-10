@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useRoute } from "@react-navigation/native";
-import axios from "axios";
+import api from "../../../services/api";
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
@@ -22,39 +22,32 @@ export default function Editar({ navigation }) {
     categoria_id: "",
     preco: "",
     descricao: "",
-    image: "",
-    usado: "",
-    estadoConservacao: "",
+    usado: false,
     quantidade: "",
-    ativo: "",
   });
 
   useEffect(() => {
-  axios
-    .get(`http://10.31.35.20:8080/produtos/${id}`)
-    .then((response) => {
-      const produto = response.data;
+    api
+      .get(`/produtos/${id}`)
+      .then((response) => {
+        const produto = response.data;
 
-      setForm({
-        nome: produto.nome || "",
-        categoria_id: produto.categoria?.id || "",
-        preco: String(produto.preco || ""),
-        descricao: produto.descricao || "",
-        image: produto.image || "",
-        usado: produto.usado ? "SIM" : "NÃO",
-        estadoConservacao:
-          (produto.estadoConservacao || "").toUpperCase(),
-        quantidade: String(produto.quantidade || ""),
-        ativo: produto.ativo ?? true,
-      });
-    })
-    .catch((error) => console.log(error));
+        setForm({
+          nome: produto.nome || "",
+          categoria_id: produto.categoria?.id || "",
+          preco: String(produto.preco || ""),
+          descricao: produto.descricao || "",
+          usado: produto.usado,
+          quantidade: String(produto.quantidade || ""),
+        });
+      })
+      .catch((error) => console.log(error));
 
-  axios
-    .get("http://192.168.56.1:8080/categorias")
-    .then((response) => setCategorias(response.data))
-    .catch((error) => console.log(error));
-}, [id]);
+    api
+      .get("/categorias")
+      .then((response) => setCategorias(response.data))
+      .catch((error) => console.log(error));
+  }, [id]);
 
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
@@ -62,30 +55,25 @@ export default function Editar({ navigation }) {
       [campo]: valor,
     }));
   };
-  const EditarPerfil = async (id) => {
-  try {
-    const response = await axios.put(
-      `http://10.31.35.20:8080/produtos/${id}`,
-      {
+  const editarProduto = async () => {
+    try {
+      const response = await api.put(`/produtos/${id}`, {
         nome: form.nome,
         descricao: form.descricao,
         preco: Number(form.preco),
-        categoria: form.categoria_id, 
-        image: form.image,
-        usado: form.usado === "SIM",
-        estadoConservacao: form.estadoConservacao,
         quantidade: Number(form.quantidade),
-        ativo: true,
-      }
-    );
+        usado: form.usado,
+        categoria_id: Number(form.categoria_id),
+      });
 
-    console.log("Editado com sucesso:", response.data);
+      console.log("Editado:", response.data);
 
-    navigation.goBack();
-  } catch (error) {
-    console.log("Erro ao salvar:", error?.response?.data || error);
-  }
-};
+      navigation.goBack();
+    } catch (error) {
+      console.log("STATUS:", error?.response?.status);
+      console.log("DATA:", error?.response?.data);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -125,23 +113,18 @@ export default function Editar({ navigation }) {
             <Text style={styles.label}>Categoria</Text>
 
             <Picker
-  selectedValue={form.categoria_id}
-  onValueChange={(itemValue) =>
-    handleChange("categoria_id", itemValue)
-  }
-  style={styles.input}
->
-  
-  <Picker.Item label="Selecione" value="" />
+              selectedValue={form.categoria_id}
+              onValueChange={(itemValue) =>
+                handleChange("categoria_id", itemValue)
+              }
+              style={styles.input}
+            >
+              <Picker.Item label="Selecione" value="" />
 
-  {categorias.map((item) => (
-    <Picker.Item
-      key={item.id}
-      label={item.nome}
-      value={item.id}
-    />
-  ))}
-</Picker>
+              {categorias.map((item) => (
+                <Picker.Item key={item.id} label={item.nome}  value={Number(item.id)} />
+              ))}
+            </Picker>
           </View>
 
           <View style={styles.containerInput}>
@@ -158,48 +141,17 @@ export default function Editar({ navigation }) {
           </View>
 
           <View style={styles.containerInput}>
-            <Text style={styles.label}>Imagem</Text>
-
-            <TextInput
-              placeholder="URL da imagem"
-              placeholderTextColor="#64748B"
-              style={styles.input}
-              value={form.image}
-              onChangeText={(text) => handleChange("image", text)}
-            />
-          </View>
-
-          <View style={styles.containerInput}>
-            <Text style={styles.label}>Estado de Conservação</Text>
-
-            <Picker
-  selectedValue={form.estadoConservacao}
-  onValueChange={(itemValue) =>
-    handleChange("estadoConservacao", itemValue)
-  }
-  style={styles.input}
->
-  <Picker.Item label="Selecione" value="" />
-  <Picker.Item label="Novo" value="Novo" />
-  <Picker.Item label="Seminovo" value="Semi Novo" />
-  <Picker.Item label="Usado" value="Usado" />
-</Picker>
-          </View>
-
-          <View style={styles.containerInput}>
             <Text style={styles.label}>Produto Usado?</Text>
 
             <Picker
-                          selectedValue={form.usado}
-                          onValueChange={(itemValue) =>
-                            handleChange("usado", itemValue)
-                          }
-                          style={styles.input}
-                        >
-                          <Picker.Item label="Selecione" value="" />
-                          <Picker.Item label="Sim" value="Sim" />
-                          <Picker.Item label="Não" value="Não" />
-                        </Picker>
+              selectedValue={form.usado}
+              onValueChange={(value) => handleChange("usado", value)}
+              style={styles.input}
+            >
+              <Picker.Item label="Selecione" value="" />
+              <Picker.Item label="Sim" value={true} />
+              <Picker.Item label="Não" value={false} />
+            </Picker>
           </View>
 
           <View style={styles.containerInput}>
@@ -230,10 +182,7 @@ export default function Editar({ navigation }) {
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => EditarPerfil(id)}
-          >
+          <TouchableOpacity style={styles.button} onPress={editarProduto}>
             <Text style={styles.buttonText}>Salvar Alterações</Text>
           </TouchableOpacity>
         </View>
