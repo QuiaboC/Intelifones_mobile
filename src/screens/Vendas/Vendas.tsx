@@ -87,8 +87,17 @@ export default function Vendas({ navigation }) {
                 {item.descricao}
               </Text>
 
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: item.usado ? "#FEE2E2" : "#DCFCE7",
+                  },
+                ]}
+              >
+                <Text style={styles.badgeText}>
+                  {item.usado ? "Usado" : "Novo"}
+                </Text>
               </View>
 
               <Text style={styles.preco}>R$ {item.preco}</Text>

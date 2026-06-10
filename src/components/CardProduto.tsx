@@ -5,33 +5,43 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import api from "../../services/api";
 
 export default function CardProduto() {
-
   const navigation = useNavigation();
   const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-    api.get("/produtos/disponiveis")
-    .then((response) => setProduto(response.data))
-  },[])
-
+    api
+      .get("/produtos/disponiveis")
+      .then((response) => setProduto(response.data));
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Produtos em ofertas</Text>
       <View style={styles.produtos}>
         {produto.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.8} onPress={() => navigation.navigate("Detalhes", { id: item.id})}>
-            <Image
-              source={{ uri: item.image }}
-              style={styles.imagem}
-            />
+          <TouchableOpacity
+            key={item.id}
+            style={styles.card}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("Detalhes", { id: item.id })}
+          >
+            <Image source={{ uri: item.image }} style={styles.imagem} />
             <View style={styles.info}>
               <Text style={styles.nome} numberOfLines={1}>
                 {item.nome}
               </Text>
               <Text style={styles.preco}>R$ {item.preco}</Text>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: item.usado ? "#FEE2E2" : "#DCFCE7",
+                  },
+                ]}
+              >
+                <Text style={styles.badgeText}>
+                  {item.usado ? "Usado" : "Novo"}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>

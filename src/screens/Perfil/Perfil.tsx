@@ -12,9 +12,7 @@ import {
   Handbag,
   Info,
 } from "lucide-react-native";
-import { removerToken } from "../../../services/auth";
 import { useEffect, useState } from "react";
-import api from "../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Perfil({ navigation }) {
@@ -44,6 +42,7 @@ export default function Perfil({ navigation }) {
       nome: "Vendas",
       icone: <Handbag size={22} color="#2563EB" />,
       rota: "Vendas",
+      apenasVendedor: true,
     },
     {
       id: 3,
@@ -75,7 +74,9 @@ export default function Perfil({ navigation }) {
   ];
 
   const logout = async () => {
-    await removerToken();
+    await AsyncStorage.removeItem("@token");
+    await AsyncStorage.removeItem("@usuario");
+    await AsyncStorage.removeItem("@sessao");
     navigation.replace("Login");
   };
 
@@ -90,10 +91,7 @@ export default function Perfil({ navigation }) {
         </View>
 
         <View style={styles.infoPerfil}>
-          <Text style={styles.NomePerfil}>
-            {" "}
-            {usuario?.nome}
-          </Text>
+          <Text style={styles.NomePerfil}> {usuario?.nome}</Text>
 
           <TouchableOpacity
             style={styles.buttonPerfil}
@@ -103,6 +101,12 @@ export default function Perfil({ navigation }) {
 
             <ChevronRight size={18} color="#fff" />
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.badgeTipo}>
+          <Text style={styles.badgeTipoText}>
+            {usuario?.role === "VENDEDOR" ? "Vendedor" : "Comprador"}
+          </Text>
         </View>
       </View>
 
@@ -125,21 +129,25 @@ export default function Perfil({ navigation }) {
       >
         <Text style={styles.categoriaTexto}>Minhas atividades</Text>
 
-        {atividades.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.cardOpcao}
-            onPress={() => navigation.navigate(item.rota)}
-          >
-            <View style={styles.cardLeft}>
-              <View style={styles.iconContainer}>{item.icone}</View>
+        {atividades
+          .filter(
+            (item) => !item.apenasVendedor || usuario?.role === "VENDEDOR",
+          )
+          .map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.cardOpcao}
+              onPress={() => navigation.navigate(item.rota)}
+            >
+              <View style={styles.cardLeft}>
+                <View style={styles.iconContainer}>{item.icone}</View>
 
-              <Text style={styles.cardText}>{item.nome}</Text>
-            </View>
+                <Text style={styles.cardText}>{item.nome}</Text>
+              </View>
 
-            <ChevronRight size={20} color="#94A3B8" />
-          </TouchableOpacity>
-        ))}
+              <ChevronRight size={20} color="#94A3B8" />
+            </TouchableOpacity>
+          ))}
 
         <Text style={styles.categoriaTexto}>Configurações e informações</Text>
 
@@ -159,12 +167,10 @@ export default function Perfil({ navigation }) {
           </TouchableOpacity>
         ))}
 
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
           <LogOut size={20} color="#EF4444" />
 
-          <Text style={styles.logoutText} onPress={logout}>
-            Sair da conta
-          </Text>
+          <Text style={styles.logoutText}>Sair da conta</Text>
         </TouchableOpacity>
       </ScrollView>
 

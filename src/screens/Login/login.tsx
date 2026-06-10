@@ -21,7 +21,6 @@ export default function Login({ navigation }) {
   const fazerLogin = async () => {
     if (!form.email.trim()) return alert("Informe o email");
     if (!form.senha.trim()) return alert("Informe a senha");
-
     try {
       const response = await api.post("/auth/login", {
         email: form.email,

@@ -51,8 +51,17 @@ export default function Detalhes({ navigation }) {
           <Text style={styles.descricao}>{produto.descricao}</Text>
           <View style={styles.containerPreco}>
             <Text style={styles.preco}>R$ {produto.preco}</Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{produto.estadoConservacao}</Text>
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: produto.usado ? "#FEE2E2" : "#DCFCE7",
+                },
+              ]}
+            >
+              <Text style={styles.badgeText}>
+                {produto.usado ? "Usado" : "Novo"}
+              </Text>
             </View>
           </View>
         </View>

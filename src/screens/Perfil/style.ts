@@ -153,4 +153,16 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 2,
   },
+  badgeTipo: {
+    backgroundColor: "#ffff",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+
+  badgeTipoText: {
+    color: "#2563EB",
+    fontWeight: "600",
+    fontSize: 12,
+  },
 });

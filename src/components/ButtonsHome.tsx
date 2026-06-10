@@ -3,42 +3,45 @@ import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ButtonsHome() {
-
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Produtos")}
+      >
         <View style={styles.image}>
           <ShoppingCart color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>
-          Mais vendidos
-        </Text>
+        <Text style={styles.text}>Mais vendidos</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Produtos")}
+      >
         <View style={styles.image}>
           <Tag color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>
-          Ofertas
-        </Text>
+        <Text style={styles.text}>Ofertas</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Produtos")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Produtos")}
+      >
         <View style={styles.image}>
           <Sparkles color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>
-          Novidades
-        </Text>
+        <Text style={styles.text}>Novidades</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Vendas")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Produtos")}
+      >
         <View style={styles.image}>
           <PackageOpen color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>
-          Meus produtos
-        </Text>
+        <Text style={styles.text}>Produtos em estoque</Text>
       </TouchableOpacity>
     </View>
   );

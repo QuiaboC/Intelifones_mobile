@@ -10,10 +10,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeft } from "lucide-react-native";
 import { useState } from "react";
-import axios from "axios";
 import { style } from "./style";
 import api from "../../../services/api";
 import { salvarToken } from "../../../services/auth";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Registro({ navigation }) {
   const [form, setForm] = useState({
@@ -23,6 +23,7 @@ export default function Registro({ navigation }) {
     endereco: "",
     senha: "",
     confirmarSenha: "",
+    role: "COMPRADOR",
   });
 
   const handleChange = (campo, valor) => {
@@ -47,7 +48,7 @@ export default function Registro({ navigation }) {
         senha: form.senha,
         telefone: form.telefone,
         endereco: form.endereco,
-        role: "VENDEDOR",
+        role: form.role,
       });
 
       await salvarToken(response.data.token);
@@ -128,6 +129,18 @@ export default function Registro({ navigation }) {
                 value={form.endereco}
                 onChangeText={(text) => handleChange("endereco", text)}
               />
+            </View>
+            <View style={style.containerInput}>
+              <Text style={style.label}>Tipo de Usuario</Text>
+
+              <Picker
+                selectedValue={form.role}
+                style={style.input}
+                onValueChange={(itemValue) => handleChange("role", itemValue)}
+              >
+                <Picker.Item label="Comprador" value="COMPRADOR" />
+                <Picker.Item label="Vendedor" value="VENDEDOR" />
+              </Picker>
             </View>
             <View style={style.containerInput}>
               <Text style={style.label}>Senha</Text>

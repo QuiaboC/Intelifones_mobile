@@ -10,7 +10,7 @@ export default function Loading({ navigation }) {
   async function verificarLogin() {
     const token = await obterToken();
 
-    if (token) {
+    if (token && token.split(".").length === 3) {
       navigation.replace("Home");
     } else {
       navigation.replace("Preview");

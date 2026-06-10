@@ -87,7 +87,7 @@ export default function Produtos({ navigation }) {
               key={item.id}
               style={styles.card}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate("Detalhes", { id: item.id})}
+              onPress={() => navigation.navigate("Detalhes", { id: item.id })}
             >
               <Image source={{ uri: item.image }} style={styles.imagem} />
               <View style={styles.info}>
@@ -95,8 +95,17 @@ export default function Produtos({ navigation }) {
                   {item.nome}
                 </Text>
                 <Text style={styles.preco}>R$ {item.preco}</Text>
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{item.estadoConservacao}</Text>
+                <View
+                  style={[
+                    styles.badge,
+                    {
+                      backgroundColor: item.usado ? "#FEE2E2" : "#DCFCE7",
+                    },
+                  ]}
+                >
+                  <Text style={styles.badgeText}>
+                    {item.usado ? "Usado" : "Novo"}
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
