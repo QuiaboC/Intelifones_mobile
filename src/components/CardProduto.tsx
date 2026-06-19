@@ -25,7 +25,10 @@ export default function CardProduto() {
             activeOpacity={0.8}
             onPress={() => navigation.navigate("Detalhes", { id: item.id })}
           >
-            <Image source={{ uri: item.image }} style={styles.imagem} />
+            <Image
+              source={{ uri: `http://localhost:8080/uploads/${item.imagem}` }}
+              style={styles.imagem}
+            />
             <View style={styles.info}>
               <Text style={styles.nome} numberOfLines={1}>
                 {item.nome}

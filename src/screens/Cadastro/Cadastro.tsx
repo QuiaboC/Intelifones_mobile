@@ -8,10 +8,13 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
 import api from "../../../services/api";
+import * as ImagePicker from "expo-image-picker";
+import { Platform } from "react-native";
 
 export default function Cadastro({ navigation }) {
   const [categorias, setCategorias] = useState([]);
@@ -20,9 +23,22 @@ export default function Cadastro({ navigation }) {
     categoria_id: "",
     preco: "",
     descricao: "",
-    usado: false,
+    usado: null,
     quantidade: "",
   });
+
+  const [imagem, setImagem] = useState<any>(null);
+
+  const selecionarImagem = async () => {
+    const resultado = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setImagem(resultado.assets[0]);
+    }
+  };
 
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
@@ -42,6 +58,26 @@ export default function Cadastro({ navigation }) {
         categoria_id: Number(form.categoria_id),
       });
 
+      const produto = response.data;
+
+      if (imagem) {
+        const formData = new FormData();
+
+        if (Platform.OS === "web") {
+          const response = await fetch(imagem.uri);
+          const blob = await response.blob();
+
+          formData.append("arquivo", blob, imagem.fileName || "produto.png");
+        } else {
+          formData.append("arquivo", {
+            uri: imagem.uri,
+            name: imagem.fileName || "produto.png",
+            type: imagem.mimeType || "image/png",
+          } as any);
+        }
+
+        await api.post(`/produtos/${produto.id}/imagem`, formData);
+      }
       console.log("Cadastrado:", response.data);
       navigation.goBack();
     } catch (error) {
@@ -118,6 +154,26 @@ export default function Cadastro({ navigation }) {
               value={form.preco}
               onChangeText={(text) => handleChange("preco", text)}
             />
+          </View>
+
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>Imagem</Text>
+
+            <TouchableOpacity style={styles.input} onPress={selecionarImagem}>
+              <Text>{imagem ? "Imagem selecionada" : "Selecionar imagem"}</Text>
+            </TouchableOpacity>
+
+            {imagem && (
+              <Image
+                source={{ uri: imagem.uri }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  marginTop: 10,
+                  borderRadius: 8,
+                }}
+              />
+            )}
           </View>
 
           <View style={styles.containerInput}>

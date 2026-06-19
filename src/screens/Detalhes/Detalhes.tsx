@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Bell, ChevronLeft, ShoppingCart } from "lucide-react-native";
+import { Bell, ChevronLeft, Heart, ShoppingCart } from "lucide-react-native";
 import Footer from "../../components/Footer";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ export default function Detalhes({ navigation }) {
   const route = useRoute();
   const { id } = route.params;
   const [produto, setProduto] = useState([]);
+  const [favorito, setFavorito] = useState(false);
 
   useEffect(() => {
     api
@@ -19,7 +20,31 @@ export default function Detalhes({ navigation }) {
       .catch((error) => console.log(error));
   }, [id]);
 
-  console.log(produto);
+  const adicionarCarrinho = async () => {
+    try {
+      await api.post("/carrinho", {
+        produtoId: produto.id,
+        quantidade: 1,
+      });
+      navigation.navigate("Carrinho");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleFavorito = async () => {
+    try {
+      if (favorito) {
+        await api.delete(`/favoritos/${produto.id}`);
+        setFavorito(false);
+      } else {
+        await api.post(`/favoritos/${produto.id}`);
+        setFavorito(true);
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,12 +68,28 @@ export default function Detalhes({ navigation }) {
         contentContainerStyle={styles.scroll}
       >
         <View style={styles.containerImagem}>
-          <Image source={{ uri: produto.image }} style={styles.imagem} />
+          <Image
+            source={{
+              uri: `http://localhost:8080/uploads/${produto.imagem}`,
+            }}
+            style={styles.imagem}
+          />
         </View>
 
         <View style={styles.containerInfo}>
-          <Text style={styles.titulo}>{produto.nome}</Text>
+          <View style={styles.containerTitulo}>
+            <Text style={styles.titulo}>{produto.nome}</Text>
+            <TouchableOpacity onPress={toggleFavorito}>
+              <Heart
+                color={favorito ? "#2563EB" : "#06B6D4"}
+                fill={favorito ? "#2563EB" : "transparent"}
+                size={24}
+              />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.descricao}>{produto.descricao}</Text>
+          <Text style={styles.descricao}>quantidade: {produto.quantidade}</Text>
           <View style={styles.containerPreco}>
             <Text style={styles.preco}>R$ {produto.preco}</Text>
             <View
@@ -71,7 +112,10 @@ export default function Detalhes({ navigation }) {
             <Text style={styles.buttonPrincipalText}>Comprar agora</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonSecundario}>
+          <TouchableOpacity
+            style={styles.buttonSecundario}
+            onPress={adicionarCarrinho}
+          >
             <ShoppingCart size={20} color="#2563EB" />
             <Text style={styles.buttonSecundarioText}>
               Adicionar ao carrinho

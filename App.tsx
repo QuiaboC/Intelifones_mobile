@@ -17,6 +17,7 @@ import PerfilUsuario from "./src/screens/perfilUsuario/PerfilUsuario";
 import EditarUsuario from "./src/screens/EditarUsuario/EditarUsuario";
 import FiltroBuscar from "./src/screens/FiltroBuscar/FiltroBuscar";
 import Loading from "./src/screens/Loading/Loading";
+import Favoritos from "./src/screens/Favoritos/Favoritos";
 import Teste from "./src/screens/Teste";
 import { StatusBar } from "expo-status-bar";
 
@@ -46,6 +47,7 @@ export default function App() {
           <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
           <Stack.Screen name="EditarUsuario" component={EditarUsuario} />
           <Stack.Screen name="FiltroBuscar" component={FiltroBuscar} />
+          <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="Loading" component={Loading} />
         </Stack.Navigator>
       </NavigationContainer>

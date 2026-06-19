@@ -75,7 +75,10 @@ export default function Vendas({ navigation }) {
         {filtrosFiltrados.map((item) => (
           <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
-              <Image source={{ uri: item.image }} style={styles.imagem} />
+              <Image
+                source={{ uri: `http://localhost:8080/uploads/${item.imagem}` }}
+                style={styles.imagem}
+              />
             </View>
 
             <View style={styles.containerText}>

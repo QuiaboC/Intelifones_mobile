@@ -100,9 +100,34 @@ export const styles = StyleSheet.create({
   },
 
   containerButton: {
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: 14,
+    justifyContent: "center",
+    gap: 8,
+  },
+
+  qtyContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F1F5F9",
+    borderRadius: 10,
+    gap: 10,
+    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+
+  qtyButton: {
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: "#E2E8F0",
+  },
+
+  preco: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#2563EB",
+    marginTop: 4,
   },
 
   deleteButton: {
@@ -111,11 +136,6 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  preco: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#2563EB",
-  },
   header: {
     alignItems: "center",
     paddingHorizontal: 12,
@@ -124,9 +144,79 @@ export const styles = StyleSheet.create({
     backgroundColor: "#2563EB",
     gap: 10,
   },
+  
   headerTitulo: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#ffff",
-  }
+  },
+
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopWidth: 1,
+    borderTopColor: "#E2E8F0",
+    padding: 12,
+    backgroundColor: "#fff",
+    gap: 12,
+  },
+
+  totalContainer: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    gap: 4,
+  },
+  totalTexto: {
+    marginTop: 6,
+    color: "#16A34A",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  buttonFinalizar: {
+    backgroundColor: "#2563EB",
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+
+  buttonFinalizarText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  containerFiltro: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    padding: 5,
+  },
+
+  filtro: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+    fontSize: 14,
+  },
+
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "red",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
 });

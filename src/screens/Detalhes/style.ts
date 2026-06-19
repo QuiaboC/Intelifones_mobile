@@ -107,4 +107,9 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
+  containerTitulo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 });
