@@ -89,7 +89,7 @@ export default function Detalhes({ navigation }) {
           </View>
 
           <Text style={styles.descricao}>{produto.descricao}</Text>
-          <Text style={styles.descricao}>quantidade: {produto.quantidade}</Text>
+          <Text style={styles.descricao}>Estoque: {produto.quantidade}</Text>
           <View style={styles.containerPreco}>
             <Text style={styles.preco}>R$ {produto.preco}</Text>
             <View
@@ -108,7 +108,7 @@ export default function Detalhes({ navigation }) {
         </View>
 
         <View style={styles.containerButtons}>
-          <TouchableOpacity style={styles.buttonPrincipal}>
+          <TouchableOpacity style={styles.buttonPrincipal} onPress={adicionarCarrinho}>
             <Text style={styles.buttonPrincipalText}>Comprar agora</Text>
           </TouchableOpacity>
 

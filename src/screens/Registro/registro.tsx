@@ -14,6 +14,7 @@ import { style } from "./style";
 import api from "../../../services/api";
 import { salvarToken } from "../../../services/auth";
 import { Picker } from "@react-native-picker/picker";
+import { showMessage } from "react-native-flash-message";
 
 export default function Registro({ navigation }) {
   const [form, setForm] = useState({
@@ -27,11 +28,26 @@ export default function Registro({ navigation }) {
   });
 
   const handleChange = (campo, valor) => {
-    setForm((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
-  };
+  if (campo === "telefone") {
+    const numbers = valor.replace(/\D/g, "");
+
+    if (numbers.length <= 2) {
+      valor = numbers;
+    } else if (numbers.length <= 7) {
+      valor = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    } else {
+      valor = `(${numbers.slice(0, 2)}) ${numbers.slice(
+        2,
+        7
+      )}-${numbers.slice(7, 11)}`;
+    }
+  }
+
+  setForm((prev) => ({
+    ...prev,
+    [campo]: valor,
+  }));
+};
 
   const cadastrarUsuario = async () => {
     if (!form.nome.trim()) return alert("Informe o nome");
@@ -54,7 +70,11 @@ export default function Registro({ navigation }) {
       await salvarToken(response.data.token);
       navigation.replace("Login");
     } catch (error) {
-      alert("Erro ao cadastrar. Verifique os dados.");
+      showMessage({
+        message: "Erro",
+        description: "Erro ao cadastrar. Verifique os dados.",
+        type: "danger",
+      });
     }
   };
 
@@ -132,13 +152,13 @@ export default function Registro({ navigation }) {
             </View>
             <View style={style.containerInput}>
               <Text style={style.label}>Tipo de Usuario</Text>
-
+            
               <Picker
                 selectedValue={form.role}
                 style={style.input}
                 onValueChange={(itemValue) => handleChange("role", itemValue)}
               >
-                <Picker.Item label="Comprador" value="COMPRADOR" />
+                <Picker.Item label="Comprador" value="COMPRADOR"/>
                 <Picker.Item label="Vendedor" value="VENDEDOR" />
               </Picker>
             </View>

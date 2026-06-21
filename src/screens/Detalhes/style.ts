@@ -10,8 +10,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 18,
+    paddingHorizontal: 12,
+    paddingVertical: 14,
     backgroundColor: "#2563EB",
   },
   headerTitulo: {

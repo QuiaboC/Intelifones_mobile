@@ -91,7 +91,7 @@ export default function Perfil({ navigation }) {
         </View>
 
         <View style={styles.infoPerfil}>
-          <Text style={styles.NomePerfil}> {usuario?.nome}</Text>
+          <Text style={styles.NomePerfil}>{usuario?.nome}</Text>
 
           <TouchableOpacity
             style={styles.buttonPerfil}
@@ -109,20 +109,35 @@ export default function Perfil({ navigation }) {
           </Text>
         </View>
       </View>
+      {usuario?.role === "VENDEDOR" ? (
+        <View style={styles.divulgar}>
+          <View style={styles.post}>
+            <View style={styles.postText}>
+              <Text style={styles.postTitulo}>
+                Venda seus produtos na nossa loja!
+              </Text>
+            </View>
 
-      <View style={styles.divulgar}>
-        <View style={styles.post}>
-          <View style={styles.postText}>
-            <Text style={styles.postTitulo}>
-              Venda seus produtos na nossa loja!
-            </Text>
+            <TouchableOpacity style={styles.postButton} onPress={() => navigation.navigate("Cadastro")}>
+              <Text style={styles.postButtonText}>Clique aqui</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.postButton}>
-            <Text style={styles.postButtonText}>Clique aqui</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      ) : (
+        <View style={styles.divulgar}>
+          <View style={styles.post}>
+            <View style={styles.postText}>
+              <Text style={styles.postTitulo}>
+                Confira os produtos disponíveis!
+              </Text>
+            </View>
 
+            <TouchableOpacity style={styles.postButton} onPress={() => navigation.navigate("Produtos")}>
+              <Text style={styles.postButtonText}>Ver produtos</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}

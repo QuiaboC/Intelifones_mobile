@@ -27,21 +27,21 @@ export default function ButtonsHome() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Produtos")}
+        onPress={() => navigation.navigate("Favoritos")}
       >
         <View style={styles.image}>
           <Sparkles color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>Novidades</Text>
+        <Text style={styles.text}>Favoritos</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Produtos")}
+        onPress={() => navigation.navigate("Compras")}
       >
         <View style={styles.image}>
           <PackageOpen color="#fff" size={22} />
         </View>
-        <Text style={styles.text}>Produtos em estoque</Text>
+        <Text style={styles.text}>Minhas compras</Text>
       </TouchableOpacity>
     </View>
   );

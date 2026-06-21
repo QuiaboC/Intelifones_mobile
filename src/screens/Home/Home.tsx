@@ -35,14 +35,14 @@ export default function Home({ navigation }) {
           <View style={styles.textContainer}>
             <Text style={styles.logoText}>intelifones</Text>
             <Text style={styles.subText}>
-              Cadastre-se para aproveitar ofertas exclusivas
+              Aproveite as melhores ofertas e encontre o aparelho ideal para você!
             </Text>
           </View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("Registro")}
+            onPress={() => navigation.navigate("Produtos")}
           >
-            <Text style={styles.buttonText}>Cadastrar</Text>
+            <Text style={styles.buttonText}>Ver mais</Text>
           </TouchableOpacity>
         </View>
         <ButtonsHome />

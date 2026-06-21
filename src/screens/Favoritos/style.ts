@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 20,
+    paddingVertical: 14,
     flexDirection: "row",
     backgroundColor: "#2563EB",
     gap: 10,

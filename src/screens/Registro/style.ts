@@ -99,4 +99,15 @@ export const style = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
+  pickerContainer: {
+  backgroundColor: "#fff",
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: "#E2E8F0",
+  overflow: "hidden",
+},
+
+picker: {
+  color: "#0F172A",
+},
 });

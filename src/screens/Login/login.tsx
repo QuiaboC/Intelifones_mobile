@@ -7,6 +7,7 @@ import { salvarToken } from "../../../services/auth";
 import { useState } from "react";
 import api from "../../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showMessage } from "react-native-flash-message";
 
 export default function Login({ navigation }) {
   const [form, setForm] = useState({
@@ -39,9 +40,18 @@ export default function Login({ navigation }) {
       );
 
       navigation.replace("Home");
+      showMessage({
+        message: "Sucesso",
+        description: "Login realizado com sucesso!",
+        type: "success",
+      });
     } catch (error) {
       console.log(error?.response?.data);
-      alert("Email ou senha incorretos.");
+      showMessage({
+        message: "Erro",
+        description: "Email ou senha incorretos.",
+        type: "danger",
+      });
     }
   };
 

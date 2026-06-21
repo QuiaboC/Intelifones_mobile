@@ -22,6 +22,8 @@ export default function Produtos({ navigation }) {
   const [busca, setBusca] = useState(buscaInicial);
   const [mostrarCategoria, setMostrarCategoria] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
+  const [usado, setUsado] = useState(null);
+  const [ordemPreco, setOrdemPreco] = useState(null);
 
   useEffect(() => {
     api
@@ -29,15 +31,29 @@ export default function Produtos({ navigation }) {
       .then((response) => setProduto(response.data));
   }, []);
 
-  const produtosFiltrados = produto.filter((item) => {
-    const filtroBusca = item.nome.toLowerCase().includes(busca.toLowerCase());
+  const produtosFiltrados = produto
+    .filter((item) => {
+      const filtroBusca = item.nome.toLowerCase().includes(busca.toLowerCase());
 
-    const filtroCategoria =
-      categoriaSelecionada === null ||
-      String(item.categoria?.id) === String(categoriaSelecionada);
+      const filtroCategoria =
+        categoriaSelecionada === null ||
+        String(item.categoria?.id) === String(categoriaSelecionada);
 
-    return filtroBusca && filtroCategoria;
-  });
+      const filtroUsado = usado === null || item.usado === usado;
+
+      return filtroBusca && filtroCategoria && filtroUsado;
+    })
+    .sort((a, b) => {
+      if (ordemPreco === "asc") {
+        return a.preco - b.preco;
+      }
+
+      if (ordemPreco === "desc") {
+        return b.preco - a.preco;
+      }
+
+      return 0;
+    });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -129,6 +145,10 @@ export default function Produtos({ navigation }) {
             onClose={() => setMostrarCategoria(false)}
             categoriaSelecionada={categoriaSelecionada}
             setCategoriaSelecionada={setCategoriaSelecionada}
+            usado={usado}
+            setUsado={setUsado}
+            ordemPreco={ordemPreco}
+            setOrdemPreco={setOrdemPreco}
           />
         </>
       )}

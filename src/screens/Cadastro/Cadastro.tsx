@@ -41,6 +41,14 @@ export default function Cadastro({ navigation }) {
   };
 
   const handleChange = (campo, valor) => {
+    if (campo === "quantidade") {
+      valor = valor.replace(/\D/g, "");
+    }
+
+    if (campo === "preco") {
+      valor = valor.replace(/[^0-9,.]/g, "");
+    }
+
     setForm((prev) => ({
       ...prev,
       [campo]: valor,
@@ -211,7 +219,9 @@ export default function Cadastro({ navigation }) {
               keyboardType="numeric"
               style={styles.input}
               value={form.quantidade}
-              onChangeText={(text) => handleChange("quantidade", text)}
+              onChangeText={(text) =>
+                handleChange("quantidade", text.replace(/\D/g, ""))
+              }
             />
           </View>
 

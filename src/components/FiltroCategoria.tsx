@@ -13,50 +13,103 @@ export default function FiltroCategoria({
   onClose,
   categoriaSelecionada,
   setCategoriaSelecionada,
+  usado,
+  setUsado,
+  ordemPreco,
+  setOrdemPreco,
 }) {
-  const [categoria, setCategoria] = useState([]);
+  const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/categorias")
-      .then((response) => setCategoria(response.data))
+      .get("http://10.0.0.110:8080/api/categorias")
+      .then((response) => setCategorias(response.data))
       .catch((error) => console.log(error));
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.indicador} />
+
       <View style={styles.containerTitulo}>
-        <Text style={styles.titulo}>Categorias</Text>
+        <Text style={styles.titulo}>Filtros</Text>
+
         <TouchableOpacity style={styles.buttonSair} onPress={onClose}>
           <X size={20} color="#2563EB" />
         </TouchableOpacity>
       </View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.categoriasContainer}
+        contentContainerStyle={styles.scrollContent}
       >
+        <Text style={styles.subtitulo}>Condição</Text>
+
         <TouchableOpacity
-          style={styles.card}
-          onPress={() => {
-            setCategoriaSelecionada(null);
-            onClose();
-          }}
+          style={[styles.card, usado === null && styles.cardSelecionado]}
+          onPress={() => setUsado(null)}
         >
-          <Text style={styles.nomeCategoria}>Todos</Text>
+          <Text style={styles.nomeItem}>Todos</Text>
         </TouchableOpacity>
-        {categoria.map((item) => (
+
+        <TouchableOpacity
+          style={[styles.card, usado === false && styles.cardSelecionado]}
+          onPress={() => setUsado(false)}
+        >
+          <Text style={styles.nomeItem}>Novo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.card, usado === true && styles.cardSelecionado]}
+          onPress={() => setUsado(true)}
+        >
+          <Text style={styles.nomeItem}>Usado</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.subtitulo}>Preço</Text>
+
+        <TouchableOpacity
+          style={[styles.card, ordemPreco === "asc" && styles.cardSelecionado]}
+          onPress={() => setOrdemPreco("asc")}
+        >
+          <Text style={styles.nomeItem}>Menor preço</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.card, ordemPreco === "desc" && styles.cardSelecionado]}
+          onPress={() => setOrdemPreco("desc")}
+        >
+          <Text style={styles.nomeItem}>Maior preço</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.subtitulo}>Categorias</Text>
+
+        <TouchableOpacity
+          style={[
+            styles.card,
+            categoriaSelecionada === null && styles.cardSelecionado,
+          ]}
+          onPress={() => setCategoriaSelecionada(null)}
+        >
+          <Text style={styles.nomeItem}>Todas</Text>
+        </TouchableOpacity>
+
+        {categorias.map((item) => (
           <TouchableOpacity
             key={item.id}
-            style={styles.card}
-            onPress={() => {
-              setCategoriaSelecionada(item.id);
-              onClose();
-            }}
+            style={[
+              styles.card,
+              categoriaSelecionada === item.id && styles.cardSelecionado,
+            ]}
+            onPress={() => setCategoriaSelecionada(item.id)}
           >
-            <Text style={styles.nomeCategoria}>{item.nome}</Text>
+            <Text style={styles.nomeItem}>{item.nome}</Text>
           </TouchableOpacity>
         ))}
+
+        <TouchableOpacity style={styles.botaoAplicar} onPress={onClose}>
+          <Text style={styles.textoBotao}>Aplicar filtros</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -74,7 +127,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 30,
+    paddingBottom: 12,
     elevation: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -88,49 +141,66 @@ const styles = StyleSheet.create({
   indicador: {
     width: 50,
     height: 5,
-    backgroundColor: "#CBD5E1",
-    borderRadius: 999,
+    backgroundColor: "#D1D5DB",
+    borderRadius: 10,
     alignSelf: "center",
     marginBottom: 15,
   },
 
   containerTitulo: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
+    alignItems: "center",
   },
 
   titulo: {
     fontSize: 22,
-    fontWeight: "700",
-    color: "#2563EB",
+    fontWeight: "bold",
   },
 
   buttonSair: {
-    backgroundColor: "#F1F5F9",
-    padding: 8,
-    borderRadius: 999,
+    padding: 4,
   },
 
-  categoriasContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    paddingBottom: 20,
+  scrollContent: {
+    paddingBottom: 30,
+  },
+
+  subtitulo: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 20,
+    marginBottom: 10,
   },
 
   card: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: "#EFF6FF",
+    padding: 14,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#BFDBFE",
-    borderRadius: 999,
+    borderColor: "#E5E7EB",
+    marginBottom: 8,
   },
-  nomeCategoria: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#334155",
+
+  cardSelecionado: {
+    backgroundColor: "#DBEAFE",
+    borderColor: "#2563EB",
+  },
+
+  nomeItem: {
+    fontSize: 16,
+  },
+
+  botaoAplicar: {
+    backgroundColor: "#2563EB",
+    padding: 15,
+    borderRadius: 12,
+    marginTop: 20,
+  },
+
+  textoBotao: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
