@@ -57,15 +57,15 @@ export const styles = StyleSheet.create({
   },
 
   nome: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 15,
+    fontWeight: "bold",
     color: "#0F172A",
   },
 
   preco: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#10B981",
+    color: "#2563EB",
   },
 
   vazioContainer: {
@@ -80,13 +80,43 @@ export const styles = StyleSheet.create({
     backgroundColor: "#E2E8F0",
   },
   vazio: {
-    color: "#0F172A",
-    fontSize: 14,
+    color: "#2563EB",
+    fontWeight: "bold",
+    fontSize: 17,
     textAlign: "center",
   },
   vazioDescricao: {
     color: "#94A3B8",
     fontSize: 12,
     textAlign: "center",
+  },
+  botoes: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  botaoVerMais: {
+    paddingVertical: 6,
+  },
+  botaoVerMaisText: {
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  precoContainer: {
+    alignItems: "center",
+    height: "100%",
+    gap: 4,
+  },
+  badge: {
+    backgroundColor: "#DCFCE7",
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+  badgeText: {
+    color: "#10B981",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });

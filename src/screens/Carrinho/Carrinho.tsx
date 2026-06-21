@@ -16,6 +16,7 @@ import {
 import { styles } from "./style";
 import { useState, useEffect } from "react";
 import api from "../../../services/api";
+import { showMessage } from "react-native-flash-message";
 
 export default function Carrinho({ navigation }) {
   const [carrinho, setCarrinho] = useState([]);
@@ -79,7 +80,11 @@ export default function Carrinho({ navigation }) {
       await api.post("/pedidos/finalizar");
 
       navigation.navigate("Home");
-      console.log("Compra finalizada com sucesso!");
+      showMessage({
+        message: "Sucesso",
+        description: "Sua compra foi finalizada com sucesso!",
+        type: "success",
+      });
     } catch (error) {
       console.log(error?.response?.data);
     }
@@ -88,7 +93,7 @@ export default function Carrinho({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <ChevronLeft size={30} color="#ffff" />
         </TouchableOpacity>
         <Text style={styles.headerTitulo}>Carrinho</Text>

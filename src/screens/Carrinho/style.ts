@@ -13,22 +13,16 @@ export const styles = StyleSheet.create({
   },
 
   containerCarrinho: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: 16,
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 20,
-    marginBottom: 5,
+    justifyContent: "center",
+    paddingVertical: 20,
+    gap: 12,
   },
 
   iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 999,
-    backgroundColor: "#DBEAFE",
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: 50,
+    padding: 20,
+    backgroundColor: "#E2E8F0",
   },
 
   textContainer: {
@@ -37,14 +31,15 @@ export const styles = StyleSheet.create({
   },
 
   titulo: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: "bold",
     color: "#2563EB",
   },
 
   subtitulo: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#64748B",
+    textAlign: "center",
   },
 
   produtoCarrinho: {

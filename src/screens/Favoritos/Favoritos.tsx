@@ -15,10 +15,21 @@ export default function Favoritos({ navigation }) {
       .catch((err) => console.log(err));
   }, []);
 
+  const excluirFavorito = (id) => {
+    api
+      .delete(`/favoritos/${id}`)
+      .then(() => {
+        setFavoritos((prevFavoritos) =>
+          prevFavoritos.filter((item) => item.id !== id),
+        );
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <ChevronLeft size={30} color="#ffff" />
         </TouchableOpacity>
         <Text style={styles.headerTitulo}>Favoritos</Text>
@@ -32,21 +43,19 @@ export default function Favoritos({ navigation }) {
           {favoritos.length === 0 ? (
             <View style={styles.vazioContainer}>
               <View style={styles.iconeVazio}>
-                <Heart size={50} color="#94A3B8" />
+                <Heart size={34} color="#2563EB" />
               </View>
-              <Text style={styles.vazio}>Você ainda não tem produtos favoritos</Text>
+              <Text style={styles.vazio}>
+                Você ainda não tem produtos favoritos
+              </Text>
               <Text style={styles.vazioDescricao}>
-                Adicione-os por meio de "Meus favoritos" ou pelo coração nas páginas de produtos
+                Adicione-os por meio de "Meus favoritos" ou pelo coração nas
+                páginas de produtos
               </Text>
             </View>
           ) : (
             favoritos.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.card}
-                activeOpacity={0.8}
-                onPress={() => navigation.navigate("Detalhes", { id: item.id })}
-              >
+              <View key={item.id} style={styles.card}>
                 <Image
                   source={{
                     uri: `http://localhost:8080/uploads/${item.imagem}`,
@@ -59,11 +68,46 @@ export default function Favoritos({ navigation }) {
                     {item.nome}
                   </Text>
 
+                  <Text>{item.descricao}</Text>
+                  <View style={styles.botoes}>
+                    <TouchableOpacity
+                      style={styles.botaoVerMais}
+                      onPress={() =>
+                        navigation.navigate("Detalhes", { id: item.id })
+                      }
+                    >
+                      <Text style={styles.botaoVerMaisText}>Ver mais</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.botaoVerMais}
+                      onPress={() => excluirFavorito(item.id)}
+                    >
+                      <Text style={styles.botaoVerMaisText}>
+                        Excluir dos favoritos
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.precoContainer}>
+                  <View style={styles.badge}>
+                    <Text
+                      style={[
+                        styles.badgeText,
+                        item.usado
+                          ? styles.badgeTextoUsado
+                          : styles.badgeTextoNovo,
+                      ]}
+                    >
+                      {item.usado ? "Usado" : "Novo"}
+                    </Text>
+                  </View>
+
                   <Text style={styles.preco}>
                     R$ {Number(item.preco).toFixed(2)}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))
           )}
         </View>

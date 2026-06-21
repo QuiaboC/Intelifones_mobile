@@ -1,5 +1,4 @@
 import { Picker } from "@react-native-picker/picker";
-import axios from "axios";
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
@@ -15,6 +14,7 @@ import { styles } from "./style";
 import api from "../../../services/api";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
+import { showMessage } from "react-native-flash-message";
 
 export default function Cadastro({ navigation }) {
   const [categorias, setCategorias] = useState([]);
@@ -67,18 +67,30 @@ export default function Cadastro({ navigation }) {
           const response = await fetch(imagem.uri);
           const blob = await response.blob();
 
-          formData.append("arquivo", blob, imagem.fileName || "produto.png");
+          formData.append("arquivo", blob, "produto.png");
         } else {
           formData.append("arquivo", {
             uri: imagem.uri,
-            name: imagem.fileName || "produto.png",
-            type: imagem.mimeType || "image/png",
+            name: "produto.jpg",
+            type: "image/jpeg",
           } as any);
         }
 
-        await api.post(`/produtos/${produto.id}/imagem`, formData);
+        try {
+          await api.post(`/produtos/${produto.id}/imagem`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        } catch (err) {
+          console.log("Erro upload imagem:", err?.response?.data || err);
+        }
       }
-      console.log("Cadastrado:", response.data);
+      showMessage({
+        message: "Sucesso",
+        description: "Produto cadastrado com sucesso!",
+        type: "success",
+      });
       navigation.goBack();
     } catch (error) {
       console.log(error?.response?.data || error);

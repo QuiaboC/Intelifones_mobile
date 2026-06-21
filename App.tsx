@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import FlashMessage from "react-native-flash-message";
 
 import Home from "./src/screens/Home/Home";
 import Login from "./src/screens/Login/login";
@@ -21,11 +22,13 @@ import Favoritos from "./src/screens/Favoritos/Favoritos";
 import Teste from "./src/screens/Teste";
 import { StatusBar } from "expo-status-bar";
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <>
+      <FlashMessage position="top" />
       <StatusBar style="light" backgroundColor="#2563EB" translucent={false} />
       <NavigationContainer>
         <Stack.Navigator

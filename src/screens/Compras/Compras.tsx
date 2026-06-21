@@ -9,23 +9,36 @@ import {
 } from "react-native";
 import { ChevronLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { styles } from "./style";
 
 export default function Compras({ navigation }) {
-  const [produto, setProduto] = useState([]);
+  const [historico, setHistorico] = useState([]);
   const [busca, setBusca] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://10.31.35.20:8080/produtos")
-      .then((response) => setProduto(response.data))
+    api
+      .get("/pedidos/historico")
+      .then((response) => setHistorico(response.data))
       .catch((error) => console.log(error));
   }, []);
 
-  const filtrosFiltrados = produto.filter((item) =>
-    item.nome.toLowerCase().includes(busca.toLowerCase()),
+  const filtrosFiltrados = historico.filter((item) =>
+    item.produto.nome.toLowerCase().includes(busca.toLowerCase()),
   );
+
+  const comprarAgora = async (produtoId) => {
+    try {
+      await api.post("/carrinho", {
+        produtoId: produtoId,
+        quantidade: 1,
+      });
+      navigation.navigate("Carrinho");
+    } catch (error) {
+      console.log(error?.response?.data);
+      alert("Erro no compra mais.");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,17 +66,22 @@ export default function Compras({ navigation }) {
         {filtrosFiltrados.map((item) => (
           <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
-              <Image source={{ uri: item.image }} style={styles.imagem} />
+              <Image
+                source={{
+                  uri: `http://localhost:8080/uploads/${item.produto.imagem}`,
+                }} 
+                style={styles.imagem}
+              />
             </View>
 
             <View style={styles.containerText}>
               <View style={styles.badgeConteudo}>
                 <View style={{ flex: 1, marginRight: 8 }}>
                   <Text style={styles.tituloProduto} numberOfLines={1}>
-                    {item.nome}
+                    {item.produto.nome} 
                   </Text>
                   <Text style={styles.descricao} numberOfLines={1}>
-                    {item.descricao}
+                    {item.produto.descricao} 
                   </Text>
                 </View>
 
@@ -71,28 +89,23 @@ export default function Compras({ navigation }) {
                   <View
                     style={[
                       styles.badge,
-                      item.estadoConservacao === "novo"
-                        ? styles.badgeNovo
-                        : item.estadoConservacao === "seminovo"
-                          ? styles.badgeSeminovo
-                          : styles.badgeUsado,
+                      item.produto.usado ? styles.badgeUsado : styles.badgeNovo, 
                     ]}
                   >
                     <Text
                       style={[
                         styles.badgeText,
-                        item.estadoConservacao === "novo"
-                          ? styles.badgeTextoNovo
-                          : item.estadoConservacao === "seminovo"
-                            ? styles.badgeTextoSeminovo
-                            : styles.badgeTextoUsado,
+                        item.produto.usado
+                          ? styles.badgeTextoUsado
+                          : styles.badgeTextoNovo,
                       ]}
                     >
-                      {item.estadoConservacao}
+                      {item.produto.usado ? "Usado" : "Novo"}
                     </Text>
                   </View>
                   <Text style={styles.preco}>
-                    R$ {Number(item.preco).toFixed(2)}
+                    R$ {Number(item.precoUnitario).toFixed(2)}{" "}
+              
                   </Text>
                 </View>
               </View>
@@ -101,13 +114,24 @@ export default function Compras({ navigation }) {
                 <TouchableOpacity
                   style={styles.buttonSecundario}
                   onPress={() =>
-                    navigation.navigate("Detalhes", { id: item.id })
-                  }
+                    navigation.navigate("Detalhes", { id: item.produto.id })
+                  } 
                 >
                   <Text style={styles.buttonSecundarioText}>Ver compra</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonPrincipal}>
-                  <Text style={styles.buttonPrincipalText}>Comprar mais</Text>
+                <TouchableOpacity
+                  style={[
+                    styles.buttonPrincipal,
+                    item.produto.quantidade === 0 && { opacity: 0.5 }, 
+                  ]}
+                  onPress={() => comprarAgora(item.produto.id)} 
+                  disabled={item.produto.quantidade === 0} 
+                >
+                  <Text style={styles.buttonPrincipalText}>
+                    {item.produto.quantidade === 0
+                      ? "Sem estoque"
+                      : "Comprar agora"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
