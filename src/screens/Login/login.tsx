@@ -51,6 +51,10 @@ export default function Login({ navigation }) {
         message: "Erro",
         description: "Email ou senha incorretos.",
         type: "danger",
+        style: {
+          paddingTop: 30,
+          paddingBottom: 20,
+        },
       });
     }
   };

@@ -106,9 +106,7 @@ export default function Produtos({ navigation }) {
               onPress={() => navigation.navigate("Detalhes", { id: item.id })}
             >
               <Image
-                source={{
-                  uri: `http://localhost:8080/uploads/${item.imagem}`,
-                }}
+                source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}` }}
                 style={styles.imagem}
               />
               <View style={styles.info}>

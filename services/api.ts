@@ -3,7 +3,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 
 const api = axios.create({
-  baseURL: "http://10.0.0.110:8080/api",
+  baseURL: "https://unalienable-jacki-exclamatorily.ngrok-free.dev/api", 
+  headers: {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true", 
+  },
 });
 
 api.interceptors.request.use(

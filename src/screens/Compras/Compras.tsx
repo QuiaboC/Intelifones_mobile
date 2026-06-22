@@ -67,9 +67,7 @@ export default function Compras({ navigation }) {
           <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
               <Image
-                source={{
-                  uri: `http://localhost:8080/uploads/${item.produto.imagem}`,
-                }} 
+                source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}` }}
                 style={styles.imagem}
               />
             </View>

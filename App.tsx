@@ -28,8 +28,8 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <>
-      <FlashMessage position="top" />
       <StatusBar style="light" backgroundColor="#2563EB" translucent={false} />
+      <FlashMessage position="top" />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Loading"

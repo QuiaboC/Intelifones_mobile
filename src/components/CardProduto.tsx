@@ -7,6 +7,7 @@ import api from "../../services/api";
 export default function CardProduto() {
   const navigation = useNavigation();
   const [produto, setProduto] = useState([]);
+  
 
   useEffect(() => {
     api
@@ -19,6 +20,7 @@ export default function CardProduto() {
       <Text style={styles.titulo}>Produtos em ofertas</Text>
       <View style={styles.produtos}>
         {produto.map((item) => (
+          
           <TouchableOpacity
             key={item.id}
             style={styles.card}
@@ -26,7 +28,7 @@ export default function CardProduto() {
             onPress={() => navigation.navigate("Detalhes", { id: item.id })}
           >
             <Image
-              source={{ uri: `http://localhost:8080/uploads/${item.imagem}` }}
+              source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}` }}
               style={styles.imagem}
             />
             <View style={styles.info}>

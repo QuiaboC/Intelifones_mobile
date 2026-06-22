@@ -69,9 +69,7 @@ export default function Detalhes({ navigation }) {
       >
         <View style={styles.containerImagem}>
           <Image
-            source={{
-              uri: `http://localhost:8080/uploads/${produto.imagem}`,
-            }}
+            source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${produto.imagem}` }}
             style={styles.imagem}
           />
         </View>
