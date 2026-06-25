@@ -21,7 +21,6 @@ import { showMessage } from "react-native-flash-message";
 export default function Carrinho({ navigation }) {
   const [carrinho, setCarrinho] = useState([]);
   const [busca, setBusca] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api
@@ -75,21 +74,6 @@ export default function Carrinho({ navigation }) {
     item.produto.nome.toLowerCase().includes(busca.toLowerCase()),
   );
 
-  const finalizarCompra = async () => {
-    try {
-      await api.post("/pedidos/finalizar");
-
-      navigation.navigate("Home");
-      showMessage({
-        message: "Sucesso",
-        description: "Sua compra foi finalizada com sucesso!",
-        type: "success",
-      });
-    } catch (error) {
-      console.log(error?.response?.data);
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -134,7 +118,9 @@ export default function Carrinho({ navigation }) {
             <View key={item.id} style={styles.produtoCarrinho}>
               <View style={styles.containerImagem}>
                 <Image
-                  source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}` }}
+                  source={{
+                    uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
+                  }}
                   style={styles.imagem}
                 />
               </View>
@@ -198,18 +184,22 @@ export default function Carrinho({ navigation }) {
           ))
         )}
       </ScrollView>
-      <View style={styles.footer}>
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalTexto}>Total: R$ {total.toFixed(2)}</Text>
-        </View>
+      {carrinho && carrinho.length > 0 && (
+        <View style={styles.footer}>
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalTexto}>Total: R$ {total.toFixed(2)}</Text>
+          </View>
 
-        <TouchableOpacity
-          style={styles.buttonFinalizar}
-          onPress={finalizarCompra}
-        >
-          <Text style={styles.buttonFinalizarText}>Finalizar Compra</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.buttonFinalizar}
+            onPress={() =>
+              navigation.navigate("Checkout", { total: total.toFixed(2) })
+            }
+          >
+            <Text style={styles.buttonFinalizarText}>Continuar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

@@ -139,7 +139,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#2563EB",
     gap: 10,
   },
-  
+
   headerTitulo: {
     fontSize: 18,
     fontWeight: "bold",

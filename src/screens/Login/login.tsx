@@ -68,7 +68,7 @@ export default function Login({ navigation }) {
     >
       <SafeAreaView style={style.body}>
         <View style={style.ContainerText}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate("Loading")}>
             <ChevronLeft color="#fff" size={30} />
           </TouchableOpacity>
           <Text style={style.logo}>Login</Text>

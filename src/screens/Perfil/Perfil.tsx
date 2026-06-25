@@ -11,6 +11,7 @@ import {
   LogOut,
   Handbag,
   Info,
+  PackageOpen,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -55,6 +56,12 @@ export default function Perfil({ navigation }) {
       nome: "Carrinho",
       icone: <ShoppingCart size={22} color="#2563EB" />,
       rota: "Carrinho",
+    },
+    {
+      id: 5,
+      nome: "Meus Produtos",
+      icone: <PackageOpen size={22} color="#2563EB" />,
+      rota: "MeusProdutos",
     },
   ];
 
