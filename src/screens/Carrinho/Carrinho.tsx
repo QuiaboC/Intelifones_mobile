@@ -16,7 +16,6 @@ import {
 import { styles } from "./style";
 import { useState, useEffect } from "react";
 import api from "../../../services/api";
-import { showMessage } from "react-native-flash-message";
 
 export default function Carrinho({ navigation }) {
   const [carrinho, setCarrinho] = useState([]);
@@ -52,7 +51,6 @@ export default function Carrinho({ navigation }) {
   const removerItem = async (itemId) => {
     try {
       await api.delete(`/carrinho/item/${itemId}`);
-
       setCarrinho((prev) => prev.filter((item) => item.id !== itemId));
     } catch (error) {
       console.log(error?.response?.data);
@@ -62,7 +60,6 @@ export default function Carrinho({ navigation }) {
   const limparCarrinho = async () => {
     try {
       await api.delete("/carrinho/limpar");
-
       const response = await api.get("/carrinho");
       setCarrinho(response.data);
     } catch (error) {
@@ -98,9 +95,10 @@ export default function Carrinho({ navigation }) {
 
           <TouchableOpacity style={styles.button} onPress={limparCarrinho}>
             <BrushCleaning size={20} color="#fff" />
-            <Text style={styles.buttonText}>Limpa carrinho</Text>
+            <Text style={styles.buttonText}>Limpar</Text>
           </TouchableOpacity>
         </View>
+
         {filtrosFiltrados.length === 0 ? (
           <View style={styles.containerCarrinho}>
             <View style={styles.iconContainer}>
@@ -119,51 +117,54 @@ export default function Carrinho({ navigation }) {
               <View style={styles.containerImagem}>
                 <Image
                   source={{
-                    uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
-                  }}
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
+                }}
                   style={styles.imagem}
                 />
               </View>
 
               <View style={styles.containerText}>
-                <Text style={styles.tituloProduto} numberOfLines={2}>
+                <Text style={styles.tituloProduto} numberOfLines={1}>
                   {item.produto.nome}
                 </Text>
-                <Text style={styles.descricao}>{item.produto.descricao}</Text>
+                <Text style={styles.descricao} numberOfLines={1}>
+                  {item.produto.descricao}
+                </Text>
 
                 <View
                   style={[
                     styles.badge,
                     {
-                      backgroundColor: item.produto.usado
-                        ? "#FEE2E2"
-                        : "#DCFCE7",
+                      backgroundColor: item.produto.usado ? "#FEE2E2" : "#DCFCE7",
                     },
                   ]}
                 >
-                  <Text style={styles.badgeText}>
+                  <Text 
+                    style={[
+                      styles.badgeText, 
+                      { color: item.produto.usado ? "#EF4444" : "#10B981" }
+                    ]}
+                  >
                     {item.produto.usado ? "Usado" : "Novo"}
                   </Text>
                 </View>
+
+
                 <View style={styles.qtyContainer}>
                   <TouchableOpacity
                     style={styles.qtyButton}
-                    onPress={() =>
-                      atualizarQuantidade(item.id, item.quantidade - 1)
-                    }
+                    onPress={() => atualizarQuantidade(item.id, item.quantidade - 1)}
                   >
-                    <Text>-</Text>
+                    <Text style={{ fontWeight: "bold", color: "#1E293B" }}>-</Text>
                   </TouchableOpacity>
 
-                  <Text>{item.quantidade}</Text>
+                  <Text style={{ fontWeight: "600", paddingHorizontal: 4 }}>{item.quantidade}</Text>
 
                   <TouchableOpacity
                     style={styles.qtyButton}
-                    onPress={() =>
-                      atualizarQuantidade(item.id, item.quantidade + 1)
-                    }
+                    onPress={() => atualizarQuantidade(item.id, item.quantidade + 1)}
                   >
-                    <Text>+</Text>
+                    <Text style={{ fontWeight: "bold", color: "#1E293B" }}>+</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -173,7 +174,7 @@ export default function Carrinho({ navigation }) {
                   style={styles.deleteButton}
                   onPress={() => removerItem(item.id)}
                 >
-                  <Trash size={20} color="#EF4444" />
+                  <Trash size={18} color="#EF4444" />
                 </TouchableOpacity>
 
                 <Text style={styles.preco}>
@@ -184,10 +185,12 @@ export default function Carrinho({ navigation }) {
           ))
         )}
       </ScrollView>
+
       {carrinho && carrinho.length > 0 && (
         <View style={styles.footer}>
           <View style={styles.totalContainer}>
-            <Text style={styles.totalTexto}>Total: R$ {total.toFixed(2)}</Text>
+            <Text style={{ fontSize: 13, color: "#64748B" }}>Total do pedido</Text>
+            <Text style={styles.totalTexto}>R$ {total.toFixed(2)}</Text>
           </View>
 
           <TouchableOpacity

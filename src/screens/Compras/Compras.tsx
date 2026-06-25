@@ -67,7 +67,9 @@ export default function Compras({ navigation }) {
           <View key={item.id} style={styles.produtoCard}>
             <View style={styles.containerImagem}>
               <Image
-                source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}` }}
+                source={{
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
+                }}
                 style={styles.imagem}
               />
             </View>
@@ -76,10 +78,10 @@ export default function Compras({ navigation }) {
               <View style={styles.badgeConteudo}>
                 <View style={{ flex: 1, marginRight: 8 }}>
                   <Text style={styles.tituloProduto} numberOfLines={1}>
-                    {item.produto.nome} 
+                    {item.produto.nome}
                   </Text>
                   <Text style={styles.descricao} numberOfLines={1}>
-                    {item.produto.descricao} 
+                    Qtd: {item.quantidade} unidade(s)
                   </Text>
                 </View>
 
@@ -87,23 +89,22 @@ export default function Compras({ navigation }) {
                   <View
                     style={[
                       styles.badge,
-                      item.produto.usado ? styles.badgeUsado : styles.badgeNovo, 
+                      item.produto.usado ? styles.badgeUsado : styles.badgeNovo,
                     ]}
                   >
                     <Text
                       style={[
                         styles.badgeText,
-                        item.produto.usado
-                          ? styles.badgeTextoUsado
-                          : styles.badgeTextoNovo,
+                        item.pedido.status === "PAGO" 
+                          ? styles.badgeTextoPago
+                          : styles.badgeTextoCancelar, 
                       ]}
                     >
-                      {item.produto.usado ? "Usado" : "Novo"}
+                      {item.pedido.status === "PAGO" ? "Pago" : "Pendente"}
                     </Text>
                   </View>
                   <Text style={styles.preco}>
-                    R$ {Number(item.precoUnitario).toFixed(2)}{" "}
-              
+                    R$ {Number(item.pedido.valorTotal).toFixed(2)}{" "}
                   </Text>
                 </View>
               </View>
@@ -113,17 +114,17 @@ export default function Compras({ navigation }) {
                   style={styles.buttonSecundario}
                   onPress={() =>
                     navigation.navigate("Detalhes", { id: item.produto.id })
-                  } 
+                  }
                 >
                   <Text style={styles.buttonSecundarioText}>Ver compra</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
                     styles.buttonPrincipal,
-                    item.produto.quantidade === 0 && { opacity: 0.5 }, 
+                    item.produto.quantidade === 0 && { opacity: 0.5 },
                   ]}
-                  onPress={() => comprarAgora(item.produto.id)} 
-                  disabled={item.produto.quantidade === 0} 
+                  onPress={() => comprarAgora(item.produto.id)}
+                  disabled={item.produto.quantidade === 0}
                 >
                   <Text style={styles.buttonPrincipalText}>
                     {item.produto.quantidade === 0

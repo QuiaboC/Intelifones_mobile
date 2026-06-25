@@ -1,6 +1,12 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Bell, ChevronLeft, Heart, ShoppingCart } from "lucide-react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, Linking } from "react-native";
+import {
+  Bell,
+  ChevronLeft,
+  Heart,
+  MessageCircle,
+  ShoppingCart,
+} from "lucide-react-native";
 import Footer from "../../components/Footer";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -46,6 +52,18 @@ export default function Detalhes({ navigation }) {
     }
   };
 
+  const abrirWhatsappVendedor = () => {
+    if (!produto?.vendedor?.telefone) return;
+    const numeroLimpo = produto.vendedor.telefone.replace(/[^\d]/g, "");
+    const mensagem = `Olá ${produto.vendedor.nome}, estou interessado no seu produto "${produto.nome}" que vi no Intelifones!`;
+    const url = `https://wa.me/55${numeroLimpo}?text=${encodeURIComponent(mensagem)}`;
+    Linking.openURL(url).catch(() => {
+      alert(
+        "Não foi possível abrir o WhatsApp. Verifique se o aplicativo está instalado.",
+      );
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -69,7 +87,9 @@ export default function Detalhes({ navigation }) {
       >
         <View style={styles.containerImagem}>
           <Image
-            source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${produto.imagem}` }}
+            source={{
+              uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${produto.imagem}`,
+            }}
             style={styles.imagem}
           />
         </View>
@@ -106,7 +126,10 @@ export default function Detalhes({ navigation }) {
         </View>
 
         <View style={styles.containerButtons}>
-          <TouchableOpacity style={styles.buttonPrincipal} onPress={adicionarCarrinho}>
+          <TouchableOpacity
+            style={styles.buttonPrincipal}
+            onPress={adicionarCarrinho}
+          >
             <Text style={styles.buttonPrincipalText}>Comprar agora</Text>
           </TouchableOpacity>
 
@@ -119,6 +142,20 @@ export default function Detalhes({ navigation }) {
               Adicionar ao carrinho
             </Text>
           </TouchableOpacity>
+          {produto.vendedor?.telefone && (
+            <TouchableOpacity
+              style={[
+                styles.buttonSecundario,
+                { borderColor: "#10B981", marginTop: 4 },
+              ]}
+              onPress={abrirWhatsappVendedor}
+            >
+              <MessageCircle size={20} color="#10B981" />
+              <Text style={[styles.buttonSecundarioText, { color: "#10B981" }]}>
+                Conversar via WhatsApp
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
       <Footer />

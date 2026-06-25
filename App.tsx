@@ -9,7 +9,6 @@ import Preview from "./src/screens/Preview/preview";
 import Produtos from "./src/screens/Produtos/Produtos";
 import Carrinho from "./src/screens/Carrinho/Carrinho";
 import Perfil from "./src/screens/Perfil/Perfil";
-import Vendas from "./src/screens/Vendas/Vendas";
 import Compras from "./src/screens/Compras/Compras";
 import Detalhes from "./src/screens/Detalhes/Detalhes";
 import Cadastro from "./src/screens/Cadastro/Cadastro";
@@ -20,6 +19,8 @@ import FiltroBuscar from "./src/screens/FiltroBuscar/FiltroBuscar";
 import Loading from "./src/screens/Loading/Loading";
 import Favoritos from "./src/screens/Favoritos/Favoritos";
 import Checkout from "./src/screens/Checkout/Checkout";
+import MeusProdutos from "./src/screens/MeusProdutos/MeusProdutos";
+import Vendas from "./src/screens/Vendas/Vendas";
 import { StatusBar } from "expo-status-bar";
 
 
@@ -53,6 +54,7 @@ export default function App() {
           <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="Loading" component={Loading} />
           <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="MeusProdutos" component={MeusProdutos} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

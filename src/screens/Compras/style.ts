@@ -42,25 +42,28 @@ export const styles = StyleSheet.create({
   },
 
   produtoCard: {
-    flexDirection: "row",
     backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 18,
+    borderRadius: 8,
+    padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
-    gap: 12,
-    alignItems: "flex-start",
+    elevation: 2,
   },
 
   containerImagem: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 6,
+    overflow: "hidden",
     backgroundColor: "#F8FAFC",
-    padding: 10,
-    borderRadius: 14,
   },
 
   imagem: {
-    width: 75,
-    height: 75,
-    resizeMode: "contain",
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
 
   containerText: {

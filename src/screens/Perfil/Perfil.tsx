@@ -62,6 +62,7 @@ export default function Perfil({ navigation }) {
       nome: "Meus Produtos",
       icone: <PackageOpen size={22} color="#2563EB" />,
       rota: "MeusProdutos",
+      apenasVendedor: true,
     },
   ];
 

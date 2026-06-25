@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 14,
-    borderRadius: 18,
+    borderRadius: 8,
     marginBottom: 5,
     gap: 12,
   },

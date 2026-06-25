@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import { ChevronLeft } from "lucide-react-native";
+import { Camera, ChevronLeft, ImageIcon } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
   ScrollView,
@@ -179,21 +179,18 @@ export default function Cadastro({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Imagem</Text>
 
-            <TouchableOpacity style={styles.input} onPress={selecionarImagem}>
-              <Text>{imagem ? "Imagem selecionada" : "Selecionar imagem"}</Text>
-            </TouchableOpacity>
-
-            {imagem && (
-              <Image
+            <TouchableOpacity style={styles.inputImage} onPress={selecionarImagem}>
+              {imagem ? (<Image
                 source={{ uri: imagem.uri }}
                 style={{
-                  width: 120,
-                  height: 120,
-                  marginTop: 10,
+                  width: "100%",
+                  height: "100%",
                   borderRadius: 8,
                 }}
-              />
-            )}
+              />): ( <><ImageIcon size={30} color={"#2563EB"}/>
+              <Text>{imagem ? "Imagem selecionada" : "Selecionar a imagem"}</Text></>)}
+              
+            </TouchableOpacity>
           </View>
 
           <View style={styles.containerInput}>
