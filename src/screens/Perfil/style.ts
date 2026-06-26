@@ -22,15 +22,20 @@ export const styles = StyleSheet.create({
   },
 
   ContainerImagem: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
     backgroundColor: "#DBEAFE",
-    borderRadius: 999,
-    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
 
   imagem: {
-    width: 75,
-    height: 75,
-    resizeMode: "contain",
+    width: "100%",
+    height: "100%",
+    borderRadius: 45,
+    resizeMode: "cover",
   },
 
   infoPerfil: {

@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -9,21 +9,42 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
+import api from "../../../services/api";
 
 export default function EditarUsuario({ navigation }) {
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
-    cpfCnpj: "",
     endereco: "",
     ativo: "",
   });
+
+  useEffect(() => {
+    api
+      .get("/usuarios/me")
+      .then((response) => setForm(response.data))
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
       ...prev,
       [campo]: valor,
     }));
+  };
+
+  const editarUsuario = async () => {
+    try {
+      const response = await api.put("/usuarios/me", {
+        nome: form.nome,
+        telefone: form.telefone,
+        endereco: form.endereco,
+      });
+      console.log(response.data);
+      navigation.navigate("Perfil");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -74,18 +95,6 @@ export default function EditarUsuario({ navigation }) {
             </View>
 
             <View style={styles.containerInput}>
-              <Text style={styles.label}>Cnpj</Text>
-
-              <TextInput
-                placeholder="Cpnj"
-                placeholderTextColor="#64748B"
-                style={styles.input}
-                value={form.cpfCnpj}
-                onChangeText={(text) => handleChange("cpfCnpj", text)}
-              />
-            </View>
-
-            <View style={styles.containerInput}>
               <Text style={styles.label}>Endereço</Text>
 
               <TextInput
@@ -100,7 +109,7 @@ export default function EditarUsuario({ navigation }) {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.goBack()}
+            onPress={editarUsuario}
           >
             <Text style={styles.buttonText}>Salvar Alterações</Text>
           </TouchableOpacity>

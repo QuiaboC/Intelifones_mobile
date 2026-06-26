@@ -28,7 +28,7 @@ export default function CardProduto() {
             onPress={() => navigation.navigate("Detalhes", { id: item.id })}
           >
             <Image
-              source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}` }}
+              source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.imagem}` }}
               style={styles.imagem}
             />
             <View style={styles.info}>

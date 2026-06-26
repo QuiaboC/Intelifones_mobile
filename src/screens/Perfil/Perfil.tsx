@@ -1,4 +1,4 @@
-import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
+import { View, ScrollView, Image, Text, TouchableOpacity, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../../components/Footer";
 import { styles } from "./style";
@@ -15,21 +15,75 @@ import {
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import api from "../../../services/api";
 
 export default function Perfil({ navigation }) {
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    async function carregarUsuario() {
-      const usuarioSalvo = await AsyncStorage.getItem("@usuario");
+  async function carregarUsuario() {
+    try {
+      const response = await api.get("/usuarios/me");
+      setUsuario(response.data);
+      await AsyncStorage.setItem(
+        "@usuario",
+        JSON.stringify(response.data)
+      );
+    } catch (error) {
+      console.log(error.response?.data || error);
+    }
+  }
 
-      if (usuarioSalvo) {
-        setUsuario(JSON.parse(usuarioSalvo));
-      }
+  carregarUsuario();
+}, []);
+
+  const alterarFoto = async () => {
+  const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+  if (!permissao.granted) {
+    alert("Permissão negada.");
+    return;
+  }
+
+  const resultado = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    quality: 0.8,
+    allowsEditing: true,
+    aspect: [1, 1],
+  });
+
+  if (resultado.canceled) return;
+
+  const imagem = resultado.assets[0];
+
+  const formData = new FormData();
+
+  try {
+    if (Platform.OS === "web") {
+      const responseImagem = await fetch(imagem.uri);
+      const blob = await responseImagem.blob();
+
+      formData.append("arquivo", blob, "usuario.png");
+    } else {
+      formData.append("arquivo", {
+        uri: imagem.uri,
+        name: "usuario.jpg",
+        type: "image/jpeg",
+      } as any);
     }
 
-    carregarUsuario();
-  }, []);
+    const response = await api.put("/usuarios/me/imagem", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    setUsuario(response.data);
+  } catch (error: any) {
+    console.log(error.response?.data || error);
+  }
+};
 
   const atividades = [
     {
@@ -69,9 +123,9 @@ export default function Perfil({ navigation }) {
   const configuracoes = [
     {
       id: 1,
-      nome: "Informações",
+      nome: "Informações de Perfil",
       icone: <Info size={22} color="#2563EB" />,
-      rota: "Informações",
+      rota: "EditarUsuario",
     },
     {
       id: 2,
@@ -91,12 +145,18 @@ export default function Perfil({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerPerfil}>
-        <View style={styles.ContainerImagem}>
+        <TouchableOpacity style={styles.ContainerImagem} onPress={alterarFoto}>
           <Image
-            source={require("../../../assets/vetorHome.png")}
+            source={
+              usuario?.imagem
+                ? {
+                     uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/usuarios/${usuario.imagem}` ,
+                  }
+                : require("../../../assets/vetorHome.png")
+            }
             style={styles.imagem}
           />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.infoPerfil}>
           <Text style={styles.NomePerfil}>{usuario?.nome}</Text>
@@ -126,7 +186,10 @@ export default function Perfil({ navigation }) {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.postButton} onPress={() => navigation.navigate("Cadastro")}>
+            <TouchableOpacity
+              style={styles.postButton}
+              onPress={() => navigation.navigate("Cadastro")}
+            >
               <Text style={styles.postButtonText}>Clique aqui</Text>
             </TouchableOpacity>
           </View>
@@ -140,7 +203,10 @@ export default function Perfil({ navigation }) {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.postButton} onPress={() => navigation.navigate("Produtos")}>
+            <TouchableOpacity
+              style={styles.postButton}
+              onPress={() => navigation.navigate("Produtos")}
+            >
               <Text style={styles.postButtonText}>Ver produtos</Text>
             </TouchableOpacity>
           </View>
