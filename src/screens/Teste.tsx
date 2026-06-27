@@ -1,10 +1,11 @@
 import { View,StyleSheet } from "react-native";
-import FiltroCategoria from "../components/FiltroCategoria";
+import ButtonSelect from "../components/ButtonSelect";
+
 
 export default function Teste(){
     return(
         <View style={styles.container}>
-            <FiltroCategoria/>
+            <ButtonSelect/>
         </View>
     );
 }

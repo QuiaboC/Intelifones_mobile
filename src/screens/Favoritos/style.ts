@@ -92,14 +92,14 @@ export const styles = StyleSheet.create({
   },
   botoes: {
     flexDirection: "row",
-    gap: 12,
+    gap: 20,
   },
   botaoVerMais: {
     paddingVertical: 6,
   },
   botaoVerMaisText: {
     color: "#2563EB",
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "bold",
   },
   precoContainer: {

@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
 
   containerText: {
     flex: 1,
-    gap: 6,
+    gap: 8,
   },
 
   tituloProduto: {
@@ -104,12 +104,11 @@ export const styles = StyleSheet.create({
   qtyContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: "#F1F5F9",
-    borderRadius: 10,
     gap: 10,
     alignSelf: "flex-start",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    borderRadius: 8,
   },
 
   qtyButton: {

@@ -31,10 +31,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.2,
   },
 
   containerImagem: {
@@ -144,6 +140,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     padding: 5,
+    marginBottom: 10,
   },
 
   filtro: {

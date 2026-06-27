@@ -68,7 +68,7 @@ export default function Compras({ navigation }) {
             <View style={styles.containerImagem}>
               <Image
                 source={{
-                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.produto.imagem}`,
                 }}
                 style={styles.imagem}
               />
@@ -85,7 +85,7 @@ export default function Compras({ navigation }) {
                   </Text>
                 </View>
 
-                <View style={{ alignItems: "flex-end" }}>
+                <View style={styles.badgePreco}>
                   <View
                     style={[
                       styles.badge,

@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 15,
     padding: 18,
+    gap: 15,
   },
 
   containerTitulo: {
@@ -49,7 +50,6 @@ export const styles = StyleSheet.create({
 
   containerInput: {
     gap: 6,
-    marginBottom: 14,
   },
 
   label: {

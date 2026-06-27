@@ -58,8 +58,8 @@ export default function Produtos({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ChevronLeft size={20} color="#ffff" />
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <ChevronLeft size={25} color="#ffff" />
         </TouchableOpacity>
 
         <TextInput
@@ -71,7 +71,7 @@ export default function Produtos({ navigation }) {
         />
 
         <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
-          <Bell color="#fff" size={20} />
+          <Bell color="#fff" size={25} />
         </TouchableOpacity>
       </View>
 
@@ -83,14 +83,20 @@ export default function Produtos({ navigation }) {
           <Text style={styles.textCategoria}>Categoria</Text>
           <ChevronDown size={18} color="#475569" />
         </TouchableOpacity>
-        <View style={styles.categoria}>
+        <TouchableOpacity
+          style={styles.categoria}
+          onPress={() => setMostrarCategoria(true)}
+        >
           <Text style={styles.textCategoria}>Preço</Text>
           <ChevronDown size={18} color="#475569" />
-        </View>
-        <View style={styles.categoriaSemBorda}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.categoriaSemBorda}
+          onPress={() => setMostrarCategoria(true)}
+        >
           <Text style={styles.textCategoria}>Condição</Text>
           <ChevronDown size={18} color="#475569" />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -106,7 +112,9 @@ export default function Produtos({ navigation }) {
               onPress={() => navigation.navigate("Detalhes", { id: item.id })}
             >
               <Image
-                source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}` }}
+                source={{
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.imagem}`,
+                }}
                 style={styles.imagem}
               />
               <View style={styles.info}>
@@ -118,11 +126,16 @@ export default function Produtos({ navigation }) {
                   style={[
                     styles.badge,
                     {
-                      backgroundColor: item.usado ? "#FEE2E2" : "#DCFCE7",
+                      backgroundColor: item.usado ? "#FEF3C7" : "#DCFCE7",
                     },
                   ]}
                 >
-                  <Text style={styles.badgeText}>
+                  <Text
+                    style={[
+                      styles.badgeText,
+                      item.usado && { color: "#D97706" },
+                    ]}
+                  >
                     {item.usado ? "Usado" : "Novo"}
                   </Text>
                 </View>

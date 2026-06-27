@@ -15,6 +15,7 @@ import api from "../../../services/api";
 import { salvarToken } from "../../../services/auth";
 import { Picker } from "@react-native-picker/picker";
 import { showMessage } from "react-native-flash-message";
+import ButtonSelect from "../../components/ButtonSelect";
 
 export default function Registro({ navigation }) {
   const [form, setForm] = useState({
@@ -76,6 +77,13 @@ export default function Registro({ navigation }) {
         type: "danger",
       });
     }
+  };
+
+  const opcoesTipoUsuario = ["Comprador", "Vendedor"];
+  const roleSelecionadoTexto = form.role === "COMPRADOR" ? "Comprador" : "Vendedor";
+  const lidarComSelecaoRole = (opcaoEscolhida) => {
+    const valorApi = opcaoEscolhida === "Comprador" ? "COMPRADOR" : "VENDEDOR";
+    handleChange("role", valorApi);
   };
 
   return (
@@ -150,18 +158,12 @@ export default function Registro({ navigation }) {
                 onChangeText={(text) => handleChange("endereco", text)}
               />
             </View>
-            <View style={style.containerInput}>
-              <Text style={style.label}>Tipo de Usuario</Text>
-            
-              <Picker
-                selectedValue={form.role}
-                style={style.input}
-                onValueChange={(itemValue) => handleChange("role", itemValue)}
-              >
-                <Picker.Item label="Comprador" value="COMPRADOR"/>
-                <Picker.Item label="Vendedor" value="VENDEDOR" />
-              </Picker>
-            </View>
+            <ButtonSelect
+              label="Tipo de Usuário"
+              opcoes={opcoesTipoUsuario}
+              selecionado={roleSelecionadoTexto}
+              aoSelecionar={lidarComSelecaoRole}
+            />
             <View style={style.containerInput}>
               <Text style={style.label}>Senha</Text>
               <TextInput

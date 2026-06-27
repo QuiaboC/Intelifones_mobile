@@ -131,7 +131,7 @@ export default function Perfil({ navigation }) {
       id: 2,
       nome: "Configurações",
       icone: <Settings size={22} color="#2563EB" />,
-      rota: "Configurações",
+      rota: "Teste",
     },
   ];
 

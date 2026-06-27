@@ -15,6 +15,7 @@ import api from "../../../services/api";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 import { showMessage } from "react-native-flash-message";
+import ButtonSelect from "../../components/ButtonSelect";
 
 export default function Cadastro({ navigation }) {
   const [categorias, setCategorias] = useState([]);
@@ -112,6 +113,19 @@ export default function Cadastro({ navigation }) {
       .catch((error) => console.log(error));
   }, []);
 
+
+  const opcoesCategorias = categorias.map((cat) => cat.nome);
+  const categoriaSelecionadaNome =
+    categorias.find((cat) => cat.id === form.categoria_id)?.nome || "";
+  const lidarSelecaoCategoria = (nomeSelecionado) => {
+    const categoriaEncontrada = categorias.find(
+      (cat) => cat.nome === nomeSelecionado,
+    );
+    if (categoriaEncontrada) {
+      handleChange("categoria_id", categoriaEncontrada.id);
+    }
+  };
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -147,21 +161,12 @@ export default function Cadastro({ navigation }) {
             />
           </View>
 
-          <View style={styles.containerInput}>
-            <Text style={styles.label}>Categoria</Text>
-
-            <Picker
-              selectedValue={form.categoria_id}
-              onValueChange={(value) => handleChange("categoria_id", value)}
-              style={styles.input}
-            >
-              <Picker.Item label="Selecione" value="" />
-
-              {categorias.map((item) => (
-                <Picker.Item key={item.id} label={item.nome} value={item.id} />
-              ))}
-            </Picker>
-          </View>
+          <ButtonSelect
+            label="Categoria"
+            opcoes={opcoesCategorias}
+            selecionado={categoriaSelecionadaNome}
+            aoSelecionar={lidarSelecaoCategoria}
+          />
 
           <View style={styles.containerInput}>
             <Text style={styles.label}>Preço</Text>
@@ -179,17 +184,27 @@ export default function Cadastro({ navigation }) {
           <View style={styles.containerInput}>
             <Text style={styles.label}>Imagem</Text>
 
-            <TouchableOpacity style={styles.inputImage} onPress={selecionarImagem}>
-              {imagem ? (<Image
-                source={{ uri: imagem.uri }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: 8,
-                }}
-              />): ( <><ImageIcon size={30} color={"#2563EB"}/>
-              <Text>{imagem ? "Imagem selecionada" : "Selecionar a imagem"}</Text></>)}
-              
+            <TouchableOpacity
+              style={styles.inputImage}
+              onPress={selecionarImagem}
+            >
+              {imagem ? (
+                <Image
+                  source={{ uri: imagem.uri }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 8,
+                  }}
+                />
+              ) : (
+                <>
+                  <ImageIcon size={30} color={"#2563EB"} />
+                  <Text>
+                    {imagem ? "Imagem selecionada" : "Selecionar a imagem"}
+                  </Text>
+                </>
+              )}
             </TouchableOpacity>
           </View>
 

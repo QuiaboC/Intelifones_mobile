@@ -57,7 +57,9 @@ export default function Favoritos({ navigation }) {
             favoritos.map((item) => (
               <View key={item.id} style={styles.card}>
                 <Image
-                  source={{ uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}` }}
+                  source={{
+                    uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.imagem}`,
+                  }}
                   style={styles.imagem}
                 />
 
@@ -88,13 +90,18 @@ export default function Favoritos({ navigation }) {
                 </View>
 
                 <View style={styles.precoContainer}>
-                  <View style={styles.badge}>
+                  <View
+                    style={[
+                      styles.badge,
+                      {
+                        backgroundColor: item.usado ? "#FEF3C7" : "#DCFCE7",
+                      },
+                    ]}
+                  >
                     <Text
                       style={[
                         styles.badgeText,
-                        item.usado
-                          ? styles.badgeTextoUsado
-                          : styles.badgeTextoNovo,
+                        item.usado && { color: "#D97706" },
                       ]}
                     >
                       {item.usado ? "Usado" : "Novo"}

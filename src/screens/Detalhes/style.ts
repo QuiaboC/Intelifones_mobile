@@ -24,7 +24,9 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
   scroll: {
-    paddingBottom: 30,
+    flex: 1,
+    paddingBottom: 20,
+    justifyContent: "space-between",
   },
   containerImagem: {
     margin: 15,
@@ -51,6 +53,7 @@ export const styles = StyleSheet.create({
   descricao: {
     fontSize: 14,
     lineHeight: 22,
+    fontWeight:"500",
     color: "#64748B",
   },
   containerPreco: {
@@ -112,4 +115,22 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  cardVendedor: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  vendedorImagem: {
+    width: 40,
+    height: 40,
+    borderRadius: 999,
+  },
+  vendedorNome:{
+    fontSize: 15,
+    fontWeight: "500",
+    color: "#2563EB",
+  },
+  estoque: {
+    fontWeight: "700"
+  }
 });

@@ -35,7 +35,7 @@ export default function MeusProdutos({ navigation }) {
       console.log(error);
     }
   };
-
+  
   const filtrosFiltrados = produto.filter((item) =>
     item.nome.toLowerCase().includes(busca.toLowerCase()),
   );
@@ -72,59 +72,84 @@ export default function MeusProdutos({ navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        {filtrosFiltrados.map((item) => (
-          <View key={item.id} style={styles.produtoCard}>
-            <View style={styles.containerImagem}>
-              <Image
-                source={{
-                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.imagem}`,
-                }}
-                style={styles.imagem}
-              />
-            </View>
-
-            <View style={styles.containerText}>
-              <Text style={styles.tituloProduto} numberOfLines={1}>
-                {item.nome}
-              </Text>
-
-              <Text style={styles.descricao}>
-                Qtd: {item.quantidade} unidade(s)
-              </Text>
-
-              <View
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: item.usado ? "#FEE2E2" : "#DCFCE7",
-                  },
-                ]}
-              >
-                <Text style={styles.badgeText}>
-                  {item.usado ? "Usado" : "Novo"}
-                </Text>
+        {filtrosFiltrados.map((item) => {
+          const semEstoque = item.quantidade <= 0;
+          return (
+            <View
+              key={item.id}
+              style={[
+                styles.produtoCard,
+                semEstoque && { opacity: 0.5 }, 
+              ]}
+            >
+              <View style={styles.containerImagem}>
+                <Image
+                  source={{
+                    uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.imagem}`,
+                  }}
+                  style={styles.imagem}
+                />
               </View>
 
-              <Text style={styles.preco}>R$ {item.preco}</Text>
-            </View>
+              <View style={styles.containerText}>
+                <Text style={styles.tituloProduto} numberOfLines={1}>
+                  {item.nome}
+                </Text>
 
-            <View style={styles.containerButton}>
-              <TouchableOpacity
-                style={styles.editButton}
-                onPress={() => navigation.navigate("Editar", { id: item.id })}
-              >
-                <Edit size={20} color="#fff" />
-              </TouchableOpacity>
+                {semEstoque ? (
+                  <Text
+                    style={[
+                      styles.descricao,
+                      { color: "#EF4444", fontWeight: "700" },
+                    ]}
+                  >
+                    Sem estoque
+                  </Text>
+                ) : (
+                  <Text style={styles.descricao}>
+                    Qtd: {item.quantidade} unidade(s)
+                  </Text>
+                )}
 
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => deletarProduto(item.id)}
-              >
-                <Trash size={20} color="#EF4444" />
-              </TouchableOpacity>
+                <View
+                  style={[
+                    styles.badge,
+                    {
+                      backgroundColor: item.usado ? "#FEF3C7" : "#DCFCE7",
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.badgeText,
+                      item.usado && { color: "#D97706" },
+                    ]}
+                  >
+                    {item.usado ? "Usado" : "Novo"}
+                  </Text>
+                </View>
+
+                <Text style={styles.preco}>R$ {item.preco}</Text>
+              </View>
+
+              <View style={styles.containerButton}>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => navigation.navigate("Editar", { id: item.id })}
+                >
+                  <Edit size={20} color="#fff" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => deletarProduto(item.id)}
+                >
+                  <Trash size={20} color="#EF4444" />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ))}
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );

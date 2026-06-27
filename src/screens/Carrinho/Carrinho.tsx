@@ -117,7 +117,7 @@ export default function Carrinho({ navigation }) {
               <View style={styles.containerImagem}>
                 <Image
                   source={{
-                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${item.produto.imagem}`,
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${item.produto.imagem}`,
                 }}
                   style={styles.imagem}
                 />
@@ -127,10 +127,6 @@ export default function Carrinho({ navigation }) {
                 <Text style={styles.tituloProduto} numberOfLines={1}>
                   {item.produto.nome}
                 </Text>
-                <Text style={styles.descricao} numberOfLines={1}>
-                  {item.produto.descricao}
-                </Text>
-
                 <View
                   style={[
                     styles.badge,
@@ -155,16 +151,16 @@ export default function Carrinho({ navigation }) {
                     style={styles.qtyButton}
                     onPress={() => atualizarQuantidade(item.id, item.quantidade - 1)}
                   >
-                    <Text style={{ fontWeight: "bold", color: "#1E293B" }}>-</Text>
+                    <Text style={{ fontWeight: "bold", color: "#1E293B", fontSize: 15, }}>-</Text>
                   </TouchableOpacity>
 
-                  <Text style={{ fontWeight: "600", paddingHorizontal: 4 }}>{item.quantidade}</Text>
+                  <Text style={{ fontWeight: "600", paddingHorizontal: 4, fontSize: 15, }}>{item.quantidade}</Text>
 
                   <TouchableOpacity
                     style={styles.qtyButton}
                     onPress={() => atualizarQuantidade(item.id, item.quantidade + 1)}
                   >
-                    <Text style={{ fontWeight: "bold", color: "#1E293B" }}>+</Text>
+                    <Text style={{ fontWeight: "bold", color: "#1E293B", fontSize: 15, }}>+</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -189,7 +185,7 @@ export default function Carrinho({ navigation }) {
       {carrinho && carrinho.length > 0 && (
         <View style={styles.footer}>
           <View style={styles.totalContainer}>
-            <Text style={{ fontSize: 13, color: "#64748B" }}>Total do pedido</Text>
+            <Text style={{ fontSize: 15, color: "#64748B", fontWeight: "bold", }}>Total do pedido:</Text>
             <Text style={styles.totalTexto}>R$ {total.toFixed(2)}</Text>
           </View>
 

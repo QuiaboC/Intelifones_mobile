@@ -21,6 +21,7 @@ import Favoritos from "./src/screens/Favoritos/Favoritos";
 import Checkout from "./src/screens/Checkout/Checkout";
 import MeusProdutos from "./src/screens/MeusProdutos/MeusProdutos";
 import Vendas from "./src/screens/Vendas/Vendas";
+import Teste from "./src/screens/Teste";
 import { StatusBar } from "expo-status-bar";
 
 
@@ -55,6 +56,7 @@ export default function App() {
           <Stack.Screen name="Loading" component={Loading} />
           <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="MeusProdutos" component={MeusProdutos} />
+          <Stack.Screen name="Teste" component={Teste} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

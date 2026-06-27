@@ -2,6 +2,7 @@ import { ShoppingCart, Tag, Sparkles, PackageOpen } from "lucide-react-native";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+
 export default function ButtonsHome() {
   const navigation = useNavigation();
 

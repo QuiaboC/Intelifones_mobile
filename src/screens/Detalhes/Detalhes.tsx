@@ -1,5 +1,12 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, Image, TouchableOpacity, ScrollView, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+} from "react-native";
 import {
   Bell,
   ChevronLeft,
@@ -25,6 +32,8 @@ export default function Detalhes({ navigation }) {
       .then((response) => setProduto(response.data))
       .catch((error) => console.log(error));
   }, [id]);
+
+  console;
 
   const adicionarCarrinho = async () => {
     try {
@@ -85,42 +94,55 @@ export default function Detalhes({ navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <View style={styles.containerImagem}>
-          <Image
-            source={{
-              uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/${produto.imagem}`,
-            }}
-            style={styles.imagem}
-          />
-        </View>
-
-        <View style={styles.containerInfo}>
-          <View style={styles.containerTitulo}>
-            <Text style={styles.titulo}>{produto.nome}</Text>
-            <TouchableOpacity onPress={toggleFavorito}>
-              <Heart
-                color={favorito ? "#2563EB" : "#06B6D4"}
-                fill={favorito ? "#2563EB" : "transparent"}
-                size={24}
-              />
-            </TouchableOpacity>
+        <View>
+          <View style={styles.containerImagem}>
+            <Image
+              source={{
+                uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${produto.imagem}`,
+              }}
+              style={styles.imagem}
+            />
           </View>
 
-          <Text style={styles.descricao}>{produto.descricao}</Text>
-          <Text style={styles.descricao}>Estoque: {produto.quantidade}</Text>
-          <View style={styles.containerPreco}>
-            <Text style={styles.preco}>R$ {produto.preco}</Text>
-            <View
-              style={[
-                styles.badge,
-                {
-                  backgroundColor: produto.usado ? "#FEE2E2" : "#DCFCE7",
-                },
-              ]}
-            >
-              <Text style={styles.badgeText}>
-                {produto.usado ? "Usado" : "Novo"}
-              </Text>
+          <View style={styles.containerInfo}>
+            <View style={styles.containerTitulo}>
+              <Text style={styles.titulo}>{produto.nome}</Text>
+              <TouchableOpacity onPress={toggleFavorito}>
+                <Heart
+                  color={favorito ? "#2563EB" : "#06B6D4"}
+                  fill={favorito ? "#2563EB" : "transparent"}
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.descricao}>{produto.descricao}</Text>
+            <Text style={styles.estoque}>Estoque: {produto.quantidade}</Text>
+            <View style={styles.cardVendedor}>
+              <Image
+                source={{
+                  uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/usuarios/${produto?.vendedor?.imagem}`,
+                }}
+                style={styles.vendedorImagem}
+              />
+              <Text style={styles.vendedorNome}>chrystian richard</Text>
+            </View>
+            <View style={styles.containerPreco}>
+              <Text style={styles.preco}>R$ {produto.preco}</Text>
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: produto.usado ? "#FEF3C7" : "#DCFCE7",
+                  },
+                ]}
+              >
+                <Text
+                  style={[styles.badgeText, produto.usado && { color: "#D97706" }]}
+                >
+                  {produto.usado ? "Usado" : "Novo"}
+                </Text>
+              </View>
             </View>
           </View>
         </View>

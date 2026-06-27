@@ -44,6 +44,9 @@ export const style = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  cardInput: {
+    gap: 10,
+  },
   containerInput: {
     gap: 6,
     marginBottom: 14,
