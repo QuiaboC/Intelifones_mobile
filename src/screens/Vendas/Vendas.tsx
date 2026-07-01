@@ -25,6 +25,7 @@ export default function Vendas({ navigation }) {
       .then((response) => setVendas(response.data))
       .catch((error) => console.log(error));
   }, []);
+  console.log(vendas);
 
   const abrirDetalhes = (venda) => {
     setVendaSelecionada(venda);
@@ -110,7 +111,7 @@ export default function Vendas({ navigation }) {
                     Nome: {vendaSelecionada.pedido.comprador.nome}
                   </Text>
                   <Text style={styles.modalInfo}>
-                    Telefone: {vendaSelecionada.pedido.telefoneContato}
+                    Telefone: {vendaSelecionada.pedido.comprador.telefone}
                   </Text>
                   <Text style={styles.modalInfo}>
                     E-mail: {vendaSelecionada.pedido.comprador.email}

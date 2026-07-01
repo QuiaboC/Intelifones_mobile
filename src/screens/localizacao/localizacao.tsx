@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../services/api";
-import atualizarEndereco from "./atualizarEndereco";
 
 export default function Localizacao({ navigation }) {
   const [localizacao, setLocalizacao] = useState([]);
@@ -89,49 +88,52 @@ export default function Localizacao({ navigation }) {
       >
         {filtrosFiltrados.map((item) => (
           <View key={item.id} style={styles.enderecoCard}>
-            <View style={styles.acoesContainer}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("atualizarEndereco", { id: item.id })
-                }
-                style={styles.botaoAcao}
-              >
-                <Edit size={20} color="#3B82F6" />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => EnderecoPrincipal(item.id)}
-                style={styles.botaoAcao}
-              >
-                <Edit size={20} color="#9fb621" />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => deletaEndereco(item.id)}
-                style={styles.botaoAcao}
-              >
-                <Trash size={20} color="#EF4444" />
-              </TouchableOpacity>
-            </View>
-
             <View style={styles.cardHeader}>
               <View style={styles.iconeContainer}>
                 <MapPin size={22} color="#2563EB" />
               </View>
 
               <View style={styles.infoContainer}>
-                <Text style={styles.ruaTexto} numberOfLines={2}>
+                <Text style={styles.ruaTexto}>
                   {item.logradouro}, {item.numero}
                 </Text>
+
                 {item.complemento ? (
                   <Text style={styles.complementoTexto}>
                     {item.complemento}
                   </Text>
                 ) : null}
+
                 <Text style={styles.bairroCidadeTexto}>
                   {item.bairro} • {item.cidade} - {item.uf}
                 </Text>
+
                 <Text style={styles.cepTexto}>CEP: {item.cep}</Text>
+              </View>
+
+              <View style={styles.seila}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("atualizarEndereco", { id: item.id })
+                  }
+                  style={styles.botaoAcao}
+                >
+                  <Edit size={20} color="#3B82F6" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => EnderecoPrincipal(item.id)}
+                  style={styles.botaoAcao}
+                >
+                  <MapPin size={20} color="#9fb621" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => deletaEndereco(item.id)}
+                  style={styles.botaoAcao}
+                >
+                  <Trash size={20} color="#EF4444" />
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -205,8 +207,8 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     gap: 12,
   },
+
   enderecoCard: {
-    position: "relative",
     backgroundColor: "#fff",
     borderRadius: 16,
     padding: 16,
@@ -217,10 +219,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 3,
+    gap: 8,
   },
   cardHeader: {
+    gap: 5,
     flexDirection: "row",
-    gap: 12,
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    width: "100%",
   },
   iconeContainer: {
     backgroundColor: "#EFF6FF",
@@ -233,7 +239,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flex: 1,
     gap: 2,
-    paddingRight: 65,
+    paddingRight: 8,
   },
   ruaTexto: {
     fontSize: 16,
@@ -255,13 +261,9 @@ const styles = StyleSheet.create({
     color: "#94A3B8",
     marginTop: 2,
   },
-  acoesContainer: {
-    position: "absolute",
-    top: 12,
-    right: 12,
+  seila: {
     flexDirection: "row",
-    gap: 8,
-    zIndex: 10,
+    gap: 6,
   },
   botaoAcao: {
     backgroundColor: "#F8FAFC",
@@ -271,12 +273,12 @@ const styles = StyleSheet.create({
     borderColor: "#E2E8F0",
   },
   tagPrincipal: {
-    alignSelf: "flex-start",
+    alignSelf: "flex-end",
     backgroundColor: "#E0F2FE",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
-    marginTop: 12,
+    marginTop: 4,
   },
   tagPrincipalTexto: {
     color: "#0369A1",

@@ -1,22 +1,27 @@
 import { Picker } from "@react-native-picker/picker";
 import { useRoute } from "@react-navigation/native";
 import api from "../../../services/api";
-import { ChevronLeft } from "lucide-react-native";
+import { ChevronLeft, ImageIcon } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
+  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./style";
+import * as ImagePicker from "expo-image-picker";
+import ButtonSelect from "../../components/ButtonSelect";
 
 export default function Editar({ navigation }) {
   const route = useRoute();
   const { id } = route.params;
   const [categorias, setCategorias] = useState([]);
+  const [imagem, setImagem] = useState<any>(null);
   const [form, setForm] = useState({
     nome: "",
     categoria_id: "",
@@ -40,6 +45,12 @@ export default function Editar({ navigation }) {
           usado: produto.usado,
           quantidade: String(produto.quantidade || ""),
         });
+
+        if (produto.imagem) {
+          setImagem({
+            uri: `https://unalienable-jacki-exclamatorily.ngrok-free.dev/uploads/produtos/${produto.imagem}`,
+          });
+        }
       })
       .catch((error) => console.log(error));
 
@@ -48,6 +59,17 @@ export default function Editar({ navigation }) {
       .then((response) => setCategorias(response.data))
       .catch((error) => console.log(error));
   }, [id]);
+
+  const selecionarImagem = async () => {
+    const resultado = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setImagem(resultado.assets[0]);
+    }
+  };
 
   const handleChange = (campo, valor) => {
     setForm((prev) => ({
@@ -66,12 +88,45 @@ export default function Editar({ navigation }) {
         categoria_id: Number(form.categoria_id),
       });
 
-      console.log("Editado:", response.data);
+      if (imagem) {
+        const formData = new FormData();
+
+        if (Platform.OS === "web") {
+          const response = await fetch(imagem.uri);
+          const blob = await response.blob();
+
+          formData.append("arquivo", blob, "produto.png");
+        } else {
+          formData.append("arquivo", {
+            uri: imagem.uri,
+            name: "produto.jpg",
+            type: "image/jpeg",
+          } as any);
+        }
+
+        await api.post(`/produtos/${id}/imagem`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
 
       navigation.goBack();
     } catch (error) {
       console.log("STATUS:", error?.response?.status);
       console.log("DATA:", error?.response?.data);
+    }
+  };
+
+  const opcoesCategorias = categorias.map((cat) => cat.nome);
+  const categoriaSelecionadaNome =
+    categorias.find((cat) => cat.id === form.categoria_id)?.nome || "";
+  const lidarSelecaoCategoria = (nomeSelecionado) => {
+    const categoriaEncontrada = categorias.find(
+      (cat) => cat.nome === nomeSelecionado,
+    );
+    if (categoriaEncontrada) {
+      handleChange("categoria_id", categoriaEncontrada.id);
     }
   };
   return (
@@ -109,23 +164,12 @@ export default function Editar({ navigation }) {
             />
           </View>
 
-          <View style={styles.containerInput}>
-            <Text style={styles.label}>Categoria</Text>
-
-            <Picker
-              selectedValue={form.categoria_id}
-              onValueChange={(itemValue) =>
-                handleChange("categoria_id", itemValue)
-              }
-              style={styles.input}
-            >
-              <Picker.Item label="Selecione" value="" />
-
-              {categorias.map((item) => (
-                <Picker.Item key={item.id} label={item.nome}  value={Number(item.id)} />
-              ))}
-            </Picker>
-          </View>
+          <ButtonSelect
+            label="Categoria"
+            opcoes={opcoesCategorias}
+            selecionado={categoriaSelecionadaNome}
+            aoSelecionar={lidarSelecaoCategoria}
+          />
 
           <View style={styles.containerInput}>
             <Text style={styles.label}>Preço</Text>
@@ -138,6 +182,30 @@ export default function Editar({ navigation }) {
               value={String(form.preco)}
               onChangeText={(text) => handleChange("preco", text)}
             />
+          </View>
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>Imagem</Text>
+
+            <TouchableOpacity
+              style={styles.inputImage}
+              onPress={selecionarImagem}
+            >
+              {imagem ? (
+                <Image
+                  source={{ uri: imagem.uri }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 8,
+                  }}
+                />
+              ) : (
+                <>
+                  <ImageIcon size={30} color="#2563EB" />
+                  <Text>Selecionar nova imagem</Text>
+                </>
+              )}
+            </TouchableOpacity>
           </View>
 
           <View style={styles.containerInput}>

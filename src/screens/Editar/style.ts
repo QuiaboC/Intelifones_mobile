@@ -68,6 +68,19 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: "#0F172A",
   },
+  inputImage: {
+    height: 250,
+    borderWidth: 3,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderStyle: "dashed",
+    backgroundColor: "#F8FAFC",
+    borderColor: "#E2E8F0",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+  },
 
   textArea: {
     minHeight: 100,

@@ -29,26 +29,43 @@ export default function Registro({ navigation }) {
   });
 
   const handleChange = (campo, valor) => {
-  if (campo === "telefone") {
-    const numbers = valor.replace(/\D/g, "");
+    if (campo === "telefone") {
+      const numbers = valor.replace(/\D/g, "");
 
-    if (numbers.length <= 2) {
-      valor = numbers;
-    } else if (numbers.length <= 7) {
-      valor = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-    } else {
-      valor = `(${numbers.slice(0, 2)}) ${numbers.slice(
-        2,
-        7
-      )}-${numbers.slice(7, 11)}`;
+      if (numbers.length <= 2) {
+        valor = numbers;
+      } else if (numbers.length <= 7) {
+        valor = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+      } else {
+        valor = `(${numbers.slice(0, 2)}) ${numbers.slice(
+          2,
+          7
+        )}-${numbers.slice(7, 11)}`;
+      }
     }
-  }
 
-  setForm((prev) => ({
-    ...prev,
-    [campo]: valor,
-  }));
-};
+    if (campo === "cpf") {
+      const numbers = valor.replace(/\D/g, "").slice(0, 11);
+
+      if (numbers.length <= 3) {
+        valor = numbers;
+      } else if (numbers.length <= 6) {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+      } else if (numbers.length <= 9) {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+      } else {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(
+          6,
+          9
+        )}-${numbers.slice(9, 11)}`;
+      }
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      [campo]: valor,
+    }));
+  };
 
   const cadastrarUsuario = async () => {
     if (!form.nome.trim()) return alert("Informe o nome");
@@ -151,8 +168,10 @@ export default function Registro({ navigation }) {
             <View style={style.containerInput}>
               <Text style={style.label}>CPF</Text>
               <TextInput
-                placeholder="Digite seu cpf"
+                placeholder="000.000.000-00"
                 placeholderTextColor="#64748B"
+                keyboardType="numeric"
+                maxLength={14}
                 style={style.input}
                 value={form.cpf}
                 onChangeText={(text) => handleChange("cpf", text)}

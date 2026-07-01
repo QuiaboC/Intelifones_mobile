@@ -50,7 +50,7 @@ export default function cadastrarEndereco({ navigation }) {
       principal: true,
     });
     console.log("Endereco cadastrado com sucesso", response.data);
-    navigation.navigate("Localizacao");
+    navigation.goBack();
   } catch (error) {
     console.log(error.response?.status);
     console.log(error.response?.data);
@@ -78,9 +78,9 @@ export default function cadastrarEndereco({ navigation }) {
             </Text>
           </View>
           <View style={styles.containerInput}>
-            <Text style={styles.label}>Logadouro</Text>
+            <Text style={styles.label}>Logradouro</Text>
             <TextInput
-              placeholder="logadouro"
+              placeholder="Logradouro"
               placeholderTextColor="#64748B"
               style={styles.input}
               value={form.logradouro}

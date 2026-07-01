@@ -27,6 +27,7 @@ export default function MeusProdutos({ navigation }) {
     }, []),
   );
 
+
   const deletarProduto = async (id) => {
     try {
       await api.delete(`/produtos/${id}`);

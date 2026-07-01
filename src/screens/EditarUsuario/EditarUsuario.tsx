@@ -27,6 +27,22 @@ export default function EditarUsuario({ navigation }) {
   }, []);
 
   const handleChange = (campo, valor) => {
+    if (campo === "cpf") {
+      const numbers = valor.replace(/\D/g, "").slice(0, 11);
+
+      if (numbers.length <= 3) {
+        valor = numbers;
+      } else if (numbers.length <= 6) {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+      } else if (numbers.length <= 9) {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+      } else {
+        valor = `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(
+          6,
+          9
+        )}-${numbers.slice(9, 11)}`;
+      }
+    } 
     setForm((prev) => ({
       ...prev,
       [campo]: valor,
@@ -95,10 +111,10 @@ export default function EditarUsuario({ navigation }) {
             </View>
 
             <View style={styles.containerInput}>
-              <Text style={styles.label}>Endereço</Text>
+              <Text style={styles.label}>CPF</Text>
 
               <TextInput
-                placeholder="Endereço"
+                placeholder="000.000.000-00"
                 placeholderTextColor="#64748B"
                 style={styles.input}
                 value={form.cpf}

@@ -22,7 +22,7 @@ export default function Compras({ navigation }) {
       .then((response) => setHistorico(response.data))
       .catch((error) => console.log(error));
   }, []);
-
+  console.log(historico);
   const filtrosFiltrados = historico.filter((item) =>
     item.produto.nome.toLowerCase().includes(busca.toLowerCase()),
   );
@@ -55,6 +55,7 @@ export default function Compras({ navigation }) {
           style={styles.filtro}
           placeholder="Pesquisar produto"
           placeholderTextColor="#64748B"
+          value={busca}
           onChangeText={setBusca}
         />
       </View>
@@ -95,9 +96,9 @@ export default function Compras({ navigation }) {
                     <Text
                       style={[
                         styles.badgeText,
-                        item.pedido.status === "PAGO" 
+                        item.pedido.status === "PAGO"
                           ? styles.badgeTextoPago
-                          : styles.badgeTextoCancelar, 
+                          : styles.badgeTextoCancelar,
                       ]}
                     >
                       {item.pedido.status === "PAGO" ? "Pago" : "Pendente"}
