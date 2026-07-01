@@ -1,77 +1,94 @@
-import { Picker } from "@react-native-picker/picker";
-import { ChevronLeft } from "lucide-react-native";
-import { useState } from "react";
+import { ChevronLeft, MapPin } from "lucide-react-native";
+import { useCallback, useEffect, useState } from "react";
 import {
   TouchableOpacity,
   View,
   Text,
   ScrollView,
-  TextInput,
+  ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
 import api from "../../../services/api";
 import { showMessage } from "react-native-flash-message";
 import { style } from "./style";
 import CardConfirmar from "../../components/CardConfirmar";
 import ButtonSelect from "../../components/ButtonSelect";
 
+const FRETE_SIMULADO = {
+  pix: 0,
+  cartao_credito: 9.9,
+  boleto: 4.9,
+};
+
 export default function Checkout({ navigation }) {
   const [modal, setModal] = useState(false);
-  const [form, setForm] = useState({
-    Cep: "",
-    Telefone: "",
-    Endereco: "",
-    Complemento: "",
-    Numero: "",
-    FormaPagamento: "",
-  });
+  const [enderecos, setEnderecos] = useState([]);
+  const [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
+  const [formaPagamento, setFormaPagamento] = useState("");
+  const [loading, setLoading] = useState(true);
+  
 
-  const camposInvalidos =
-    !form.Endereco.trim() ||
-    !form.Cep.trim() ||
-    !form.Numero.trim() ||
-    !form.FormaPagamento.trim() ||
-    !form.Telefone.trim();
+  useFocusEffect(
+    useCallback(() => {
+      api
+        .get("/usuarios/enderecos")
+        .then((res) => {
+          setEnderecos(res.data);
+          const principal = res.data.find((e) => e.principal);
+          if (principal) setEnderecoSelecionado(principal);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    }, [])
+  );
 
-  const handleChange = (campo, valor) => {
-    if (campo === "Telefone") {
-      const numbers = valor.replace(/\D/g, "");
-      if (numbers.length <= 2) {
-        valor = numbers;
-      } else if (numbers.length <= 7) {
-        valor = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-      } else {
-        valor = `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
-      }
-    }
-    if (campo === "Cep") {
-      const numbers = valor.replace(/\D/g, "");
-      if (numbers.length <= 5) {
-        valor = numbers;
-      } else {
-        valor = `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
-      }
-    }
-    if (campo === "Numero") {
-      valor = valor.replace(/\D/g, "");
-    }
-    setForm((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
+  const opcoesEndereco = enderecos.map(
+    (e) => `${e.logradouro}, ${e.numero} - ${e.bairro}, ${e.cidade}`
+  );
+
+  const opcoesPagamento = ["Pix", "Cartão de crédito", "Boleto"];
+
+  const mapaValores: Record<string, string> = {
+    Pix: "pix",
+    "Cartão de crédito": "cartao_credito",
+    Boleto: "boleto",
   };
+
+  const mapaValoresInversos: Record<string, string> = {
+    pix: "Pix",
+    cartao_credito: "Cartão de crédito",
+    boleto: "Boleto",
+  };
+
+  const frete = formaPagamento ? FRETE_SIMULADO[formaPagamento] ?? 0 : null;
+
+  const enderecoTexto = enderecoSelecionado
+    ? `${enderecoSelecionado.logradouro}, ${enderecoSelecionado.numero} - ${enderecoSelecionado.bairro}, ${enderecoSelecionado.cidade}`
+    : "";
+
+  const aoSelecionarEndereco = (texto: string) => {
+    const encontrado = enderecos.find(
+      (e) =>
+        `${e.logradouro}, ${e.numero} - ${e.bairro}, ${e.cidade}` === texto
+    );
+    setEnderecoSelecionado(encontrado || null);
+  };
+
+  const camposInvalidos = !enderecoSelecionado || !formaPagamento;
 
   const finalizarCompra = async () => {
     setModal(false);
     try {
       await api.post("/pedidos/finalizar", {
-        endereco: form.Endereco,
-        complemento: form.Complemento,
-        numero: form.Numero,
-        cep: form.Cep,
-        formaPagamento: form.FormaPagamento,
-        telefoneContato: form.Telefone,
+        endereco: enderecoSelecionado.logradouro,
+        complemento: enderecoSelecionado.complemento || "",
+        numero: enderecoSelecionado.numero,
+        cep: enderecoSelecionado.cep,
+        formaPagamento,
+        telefoneContato: "",
+        valorFrete: frete,
       });
 
       showMessage({
@@ -85,30 +102,27 @@ export default function Checkout({ navigation }) {
       console.log(error?.response?.data);
       showMessage({
         message: "Erro",
-        description:
-          error?.response?.data?.message || "Erro ao finalizar compra!",
+        description: error?.response?.data?.message || "Erro ao finalizar compra!",
         type: "danger",
       });
     }
   };
 
-  const opcoesPagamento = ["Pix", "Cartão de crédito", "Boleto"];
-  const mapaValoresInversos: Record<string, string> = {
-    pix: "Pix",
-    cartao_credito: "Cartão de crédito",
-    boleto: "Boleto",
-  };
-  const pagamentoSelecionadoTexto =
-    mapaValoresInversos[form.FormaPagamento] || "";
-  const lidarComSelecaoPagamento = (opcaoEscolhida: string) => {
-    const mapaValores: Record<string, string> = {
-      Pix: "pix",
-      "Cartão de crédito": "cartao_credito",
-      Boleto: "boleto",
-    };
-    const valorApi = mapaValores[opcaoEscolhida] || "";
-    handleChange("FormaPagamento", valorApi);
-  };
+  if (loading) {
+    return (
+      <SafeAreaView style={style.container}>
+        <View style={style.header}>
+          <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
+            <ChevronLeft size={30} color="#fff" />
+          </TouchableOpacity>
+          <Text style={style.headerTitulo}>Checkout</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color="#2563EB" />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={style.container}>
@@ -128,71 +142,47 @@ export default function Checkout({ navigation }) {
             <View style={style.containerTitulo}>
               <Text style={style.nome}>Finalizar Pedido</Text>
               <Text style={style.subtitulo}>
-                Informe os dados de entrega e pagamento
+                Selecione o endereço e forma de pagamento
               </Text>
             </View>
 
-            <View style={style.containerInput}>
-              <Text style={style.label}>CEP</Text>
-              <TextInput
-                style={style.input}
-                placeholder="00000-000"
-                placeholderTextColor="#64748B"
-                value={form.Cep}
-                onChangeText={(text) => handleChange("Cep", text)}
+            {enderecos.length === 0 ? (
+              <TouchableOpacity
+                style={styles.semEndereco}
+                onPress={() => navigation.navigate("cadastrarEndereco")}
+              >
+                <MapPin size={20} color="#2563EB" />
+                <Text style={styles.semEnderecoTexto}>
+                  Nenhum endereço cadastrado. Toque para adicionar.
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <ButtonSelect
+                label="Endereço de entrega"
+                opcoes={opcoesEndereco}
+                selecionado={enderecoTexto}
+                aoSelecionar={aoSelecionarEndereco}
               />
-            </View>
-
-            <View style={style.containerInput}>
-              <Text style={style.label}>Telefone para contato</Text>
-              <TextInput
-                style={style.input}
-                placeholder="(00) 00000-0000"
-                placeholderTextColor="#64748B"
-                value={form.Telefone}
-                onChangeText={(text) => handleChange("Telefone", text)}
-              />
-            </View>
-
-            <View style={style.containerInput}>
-              <Text style={style.label}>Endereço</Text>
-              <TextInput
-                style={style.input}
-                placeholder="Rua, Avenida, etc."
-                placeholderTextColor="#64748B"
-                value={form.Endereco}
-                onChangeText={(text) => handleChange("Endereco", text)}
-              />
-            </View>
-
-            <View style={style.containerInput}>
-              <Text style={style.label}>Complemento</Text>
-              <TextInput
-                style={style.input}
-                placeholder="Apartamento, sala, etc."
-                placeholderTextColor="#64748B"
-                value={form.Complemento}
-                onChangeText={(text) => handleChange("Complemento", text)}
-              />
-            </View>
-
-            <View style={style.containerInput}>
-              <Text style={style.label}>Número da casa</Text>
-              <TextInput
-                style={style.input}
-                placeholder="Número da casa"
-                placeholderTextColor="#64748B"
-                value={form.Numero}
-                onChangeText={(text) => handleChange("Numero", text)}
-              />
-            </View>
+            )}
 
             <ButtonSelect
               label="Forma de pagamento"
               opcoes={opcoesPagamento}
-              selecionado={pagamentoSelecionadoTexto}
-              aoSelecionar={lidarComSelecaoPagamento}
+              selecionado={mapaValoresInversos[formaPagamento] || ""}
+              aoSelecionar={(op) => setFormaPagamento(mapaValores[op] || "")}
             />
+
+            {frete !== null && (
+              <View style={styles.freteContainer}>
+                <Text style={styles.freteLabel}>Frete estimado</Text>
+                <Text style={styles.freteValor}>
+                  {frete === 0 ? "Grátis 🎉" : `R$ ${frete.toFixed(2)}`}
+                </Text>
+                {frete === 0 && (
+                  <Text style={styles.freteDica}>Pix sem custo de entrega!</Text>
+                )}
+              </View>
+            )}
           </View>
 
           <TouchableOpacity
@@ -205,6 +195,7 @@ export default function Checkout({ navigation }) {
           >
             <Text style={style.buttonText}>Finalizar</Text>
           </TouchableOpacity>
+
           <CardConfirmar
             visivel={modal}
             aoFechar={() => setModal(false)}
@@ -215,3 +206,46 @@ export default function Checkout({ navigation }) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  semEndereco: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: "#EFF6FF",
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
+    marginBottom: 16,
+  },
+  semEnderecoTexto: {
+    flex: 1,
+    fontSize: 14,
+    color: "#2563EB",
+    fontWeight: "500",
+  },
+  freteContainer: {
+    backgroundColor: "#F0FDF4",
+    borderWidth: 1,
+    borderColor: "#BBF7D0",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 16,
+    gap: 4,
+  },
+  freteLabel: {
+    fontSize: 13,
+    color: "#64748B",
+    fontWeight: "500",
+  },
+  freteValor: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#16A34A",
+  },
+  freteDica: {
+    fontSize: 12,
+    color: "#16A34A",
+  },
+});

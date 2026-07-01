@@ -12,6 +12,7 @@ import {
   Handbag,
   Info,
   PackageOpen,
+  MapPin,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -118,6 +119,12 @@ export default function Perfil({ navigation }) {
       rota: "MeusProdutos",
       apenasVendedor: true,
     },
+    {
+      id: 6,
+      nome: "Meus Endereços",
+      icone: <MapPin size={22} color="#2563EB" />,
+      rota: "Localizacao",
+    },
   ];
 
   const configuracoes = [
@@ -127,12 +134,7 @@ export default function Perfil({ navigation }) {
       icone: <Info size={22} color="#2563EB" />,
       rota: "EditarUsuario",
     },
-    {
-      id: 2,
-      nome: "Configurações",
-      icone: <Settings size={22} color="#2563EB" />,
-      rota: "Teste",
-    },
+    
   ];
 
   const logout = async () => {

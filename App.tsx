@@ -21,6 +21,11 @@ import Favoritos from "./src/screens/Favoritos/Favoritos";
 import Checkout from "./src/screens/Checkout/Checkout";
 import MeusProdutos from "./src/screens/MeusProdutos/MeusProdutos";
 import Vendas from "./src/screens/Vendas/Vendas";
+import Localizacao from "./src/screens/localizacao/localizacao";
+import cadastrarEndereco from "./src/screens/localizacao/cadastrarEndereco";
+import atualizarEndereco from "./src/screens/localizacao/atualizarEndereco";
+import recuperarSenha from "./src/screens/recuperar/recuperarSenha";
+import ResetarSenha from "./src/screens/recuperar/resetarSenha";
 import Teste from "./src/screens/Teste";
 import { StatusBar } from "expo-status-bar";
 
@@ -56,6 +61,11 @@ export default function App() {
           <Stack.Screen name="Loading" component={Loading} />
           <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="MeusProdutos" component={MeusProdutos} />
+          <Stack.Screen name="Localizacao" component={Localizacao} />
+          <Stack.Screen name="cadastrarEndereco" component={cadastrarEndereco} />
+          <Stack.Screen name="atualizarEndereco" component={atualizarEndereco} />
+          <Stack.Screen name="recuperarSenha" component={recuperarSenha} />
+          <Stack.Screen name="ResetarSenha" component={ResetarSenha} />
           <Stack.Screen name="Teste" component={Teste} />
         </Stack.Navigator>
       </NavigationContainer>

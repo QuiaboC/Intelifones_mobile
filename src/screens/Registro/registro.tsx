@@ -22,7 +22,7 @@ export default function Registro({ navigation }) {
     nome: "",
     email: "",
     telefone: "",
-    endereco: "",
+    cpf: "",
     senha: "",
     confirmarSenha: "",
     role: "COMPRADOR",
@@ -64,7 +64,7 @@ export default function Registro({ navigation }) {
         email: form.email,
         senha: form.senha,
         telefone: form.telefone,
-        endereco: form.endereco,
+        cpf: form.cpf,
         role: form.role,
       });
 
@@ -149,13 +149,13 @@ export default function Registro({ navigation }) {
               />
             </View>
             <View style={style.containerInput}>
-              <Text style={style.label}>Endereço</Text>
+              <Text style={style.label}>CPF</Text>
               <TextInput
-                placeholder="Digite seu endereço"
+                placeholder="Digite seu cpf"
                 placeholderTextColor="#64748B"
                 style={style.input}
-                value={form.endereco}
-                onChangeText={(text) => handleChange("endereco", text)}
+                value={form.cpf}
+                onChangeText={(text) => handleChange("cpf", text)}
               />
             </View>
             <ButtonSelect

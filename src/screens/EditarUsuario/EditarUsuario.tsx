@@ -15,7 +15,7 @@ export default function EditarUsuario({ navigation }) {
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
-    endereco: "",
+    cpf: "",
     ativo: "",
   });
 
@@ -38,7 +38,7 @@ export default function EditarUsuario({ navigation }) {
       const response = await api.put("/usuarios/me", {
         nome: form.nome,
         telefone: form.telefone,
-        endereco: form.endereco,
+        cpf: form.cpf,
       });
       console.log(response.data);
       navigation.navigate("Perfil");
@@ -101,8 +101,8 @@ export default function EditarUsuario({ navigation }) {
                 placeholder="Endereço"
                 placeholderTextColor="#64748B"
                 style={styles.input}
-                value={form.endereco}
-                onChangeText={(text) => handleChange("endereco", text)}
+                value={form.cpf}
+                onChangeText={(text) => handleChange("cpf", text)}
               />
             </View>
           </View>
